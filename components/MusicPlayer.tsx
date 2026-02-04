@@ -23,7 +23,7 @@ const MusicPlayer: React.FC = () => {
   const [track, setTrack] = useState<Track>({
     title: "back to friends",
     artist: "sombr",
-    src: "https://st2.ezsrv.net/download?sig=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmaWxlUGF0aCI6Ii4vZmlsZXMvMjAyNS81LzIwLzE4LzU0L2M0ZDA3M2Q2OTA3YWQwY2E1MzcyNDM4MC5tcDMiLCJ0aXRsZSI6InNvbWJyIC0gYmFjayB0byBmcmllbmRzIChvZmZpY2lhbCB2aWRlbykubXAzIiwiaWF0IjoxNzY5OTQzNzI4LCJleHAiOjE3NzAwMzAxMjh9.i-9htddmGsmo7b50Rc8Vihj02PsJmNxuqfqK4mfH6ZQ?download",
+    src: "/audio/default.mp3", // File lokal (Anti-Expired)
     image: "https://i.ytimg.com/vi/c8zq4kAn_O0/hq720.jpg"
   });
 
