@@ -74,7 +74,7 @@ const About: React.FC = () => {
             ].map((card, idx) => (
               <div 
                 key={idx}
-                className="group relative p-8 lg:p-12 rounded-[30px] bg-white/[0.02] border border-white/5 hover:border-[#00f0ff]/30 transition-all duration-500 ease-out interactive overflow-hidden min-h-[350px] flex flex-col"
+                className="group relative p-8 lg:p-12 rounded-[30px] bg-white/[0.02] border border-white/5 hover:border-[#00f0ff]/30 group-hover:shadow-[0_0_30px_rgba(0,240,255,0.1)] transition-all duration-500 ease-out interactive overflow-hidden min-h-[350px] flex flex-col"
               >
                 <div className="absolute -top-10 -right-10 w-32 h-32 bg-[#00f0ff]/5 rounded-full blur-[40px] group-hover:bg-[#00f0ff]/10 transition-all duration-700"></div>
                 

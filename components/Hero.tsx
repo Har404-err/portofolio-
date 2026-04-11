@@ -89,7 +89,7 @@ const Hero: React.FC = () => {
         >
           <a 
             href="#contact" 
-            className="interactive group relative px-10 py-5 overflow-hidden rounded-full transition-all block"
+            className="interactive group relative px-10 py-5 overflow-hidden rounded-full transition-all block hover:shadow-[0_0_30px_rgba(0,240,255,0.4)]"
           >
             <div className="absolute inset-0 bg-[#00f0ff] translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out"></div>
             <div className="absolute inset-0 border border-white/20 rounded-full group-hover:border-[#00f0ff] transition-colors"></div>

@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
+import LottieAnimation from './LottieAnimation';
 
 const Contact: React.FC = () => {
   return (
@@ -30,8 +31,12 @@ const Contact: React.FC = () => {
           >
             <div className="w-32 h-32 lg:w-48 lg:h-48 rounded-full border border-white/10 flex items-center justify-center p-5 relative">
                <div className="absolute inset-0 rounded-full border border-[#00f0ff]/20 animate-ping"></div>
-               <div className="w-full h-full rounded-full bg-[#00f0ff] flex items-center justify-center shadow-[0_0_50px_rgba(0, 240, 255,0.2)]">
-                  <span className="text-black text-4xl lg:text-6xl font-black">✦</span>
+               <div className="w-full h-full rounded-full bg-[#00f0ff]/10 flex items-center justify-center shadow-[0_0_50px_rgba(0, 240, 255,0.2)] overflow-hidden">
+                  {/* Cyber-tech themed Lottie Animation */}
+                  <LottieAnimation 
+                    url="https://lottie.host/17e2eefd-4a11-4770-b742-d61ec9b3986a/U4H0gJzTfT.json" 
+                    className="w-full h-full object-cover scale-[1.5]"
+                  />
                </div>
             </div>
           </motion.div>

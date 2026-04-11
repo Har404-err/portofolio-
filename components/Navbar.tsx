@@ -13,7 +13,7 @@ const Navbar: React.FC = () => {
 
   return (
     <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${scrolled ? 'p-4 md:p-6' : 'p-8 md:p-12'}`}>
-      <div className={`mx-auto max-w-7xl w-full flex justify-between items-center transition-all duration-500 ${scrolled ? 'bg-white/5 backdrop-blur-xl border border-white/10 rounded-full px-8 py-4 shadow-2xl' : ''}`}>
+      <div className={`mx-auto max-w-7xl w-full flex justify-between items-center transition-all duration-500 ${scrolled ? 'bg-white/5 backdrop-blur-xl border border-[#00f0ff]/20 rounded-full px-8 py-4 shadow-[0_0_20px_rgba(0,240,255,0.15)]' : ''}`}>
         <motion.div 
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}

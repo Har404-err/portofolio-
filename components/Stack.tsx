@@ -47,7 +47,7 @@ const Stack: React.FC = () => {
               key={`${item.name}-${idx}`}
               className="group flex items-center gap-6 md:gap-8 interactive"
             >
-              <i className={`${item.icon} text-5xl md:text-9xl text-white opacity-10 group-hover:opacity-100 group-hover:text-[#00f0ff] group-hover:scale-110 transition-all duration-700`}></i>
+              <i className={`${item.icon} text-5xl md:text-9xl text-white opacity-10 group-hover:opacity-100 group-hover:text-[#00f0ff] group-hover:scale-110 group-hover:drop-shadow-[0_0_15px_rgba(0,240,255,0.8)] transition-all duration-700`}></i>
               <span className="font-jakarta text-3xl md:text-8xl font-black uppercase text-white/5 group-hover:text-white transition-colors">
                 {item.name}
               </span>
@@ -69,7 +69,7 @@ const Stack: React.FC = () => {
               key={`${item.name}-${idx}`}
               className="group flex items-center gap-6 md:gap-8 interactive"
             >
-              <i className={`${item.icon} text-5xl md:text-9xl text-white opacity-10 group-hover:opacity-100 group-hover:text-[#00f0ff] group-hover:scale-110 transition-all duration-700`}></i>
+              <i className={`${item.icon} text-5xl md:text-9xl text-white opacity-10 group-hover:opacity-100 group-hover:text-[#00f0ff] group-hover:scale-110 group-hover:drop-shadow-[0_0_15px_rgba(0,240,255,0.8)] transition-all duration-700`}></i>
               <span className="font-jakarta text-3xl md:text-8xl font-black uppercase text-white/5 group-hover:text-white transition-colors">
                 {item.name}
               </span>
