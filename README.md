@@ -11,7 +11,7 @@ Welcome to the official portfolio of **MUH4RHQ**. This project showcases my expe
 
 This portfolio is not just a static site; it's a statement of **architectural integrity**. Built with speed and interactivity in mind, it features:
 
-*   **Cyberpunk Aesthetic:** Dark mode, neon accents (`#d4ff00`), and CRT scanline effects.
+*   **Cyberpunk Aesthetic:** Dark mode, neon accents (`#00f0ff`), and CRT scanline effects.
 *   **Interactive UX:** Custom cursor logic that works on both Desktop and Mobile (Touch).
 *   **Performance First:** Powered by Vite and React for instant loading.
 *   **Responsive Design:** Optimized for all viewports, from mobile screens to 4K monitors.

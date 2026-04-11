@@ -32,7 +32,7 @@ const Hero: React.FC = () => {
   };
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center px-4 md:px-6 lg:px-20 overflow-hidden bg-[#050505]">
+    <section className="relative min-h-screen flex items-center justify-center px-4 md:px-6 lg:px-20 overflow-hidden bg-[#030712]">
       {/* Background Profile Layer - Editorial Aesthetic in Full Color */}
       <motion.div 
         style={{ y: yImage, scale, opacity }}
@@ -44,9 +44,9 @@ const Hero: React.FC = () => {
             alt="MUH4RHQ" 
             className="w-full h-full object-cover rounded-[50px] md:rounded-[100px]"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-[#050505]"></div>
-          <div className="absolute inset-0 bg-gradient-to-r from-[#050505] via-transparent to-[#050505]"></div>
-          <div className="absolute inset-0 bg-[#050505]/30"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-[#030712] via-transparent to-[#030712]"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-[#030712] via-transparent to-[#030712]"></div>
+          <div className="absolute inset-0 bg-[#030712]/30"></div>
         </div>
       </motion.div>
 
@@ -58,11 +58,11 @@ const Hero: React.FC = () => {
         className="relative z-10 w-full max-w-7xl mx-auto flex flex-col items-center text-center py-20"
       >
         <motion.div variants={itemVariants} className="mb-6 flex items-center gap-4">
-          <span className="w-8 md:w-16 h-px bg-[#d4ff00]/50"></span>
-          <span className="text-[10px] md:text-[11px] font-black uppercase tracking-[1em] text-[#d4ff00]">
+          <span className="w-8 md:w-16 h-px bg-[#00f0ff]/50"></span>
+          <span className="text-[10px] md:text-[11px] font-black uppercase tracking-[1em] text-[#00f0ff]">
             EST. MMXXV
           </span>
-          <span className="w-8 md:w-16 h-px bg-[#d4ff00]/50"></span>
+          <span className="w-8 md:w-16 h-px bg-[#00f0ff]/50"></span>
         </motion.div>
 
         <motion.div style={{ y: yText }} className="relative reveal-text w-full">
@@ -79,7 +79,7 @@ const Hero: React.FC = () => {
           className="mt-12 md:mt-20 max-w-3xl px-4"
         >
           <p className="text-xl md:text-3xl lg:text-4xl text-white/90 font-light tracking-tight leading-snug">
-            <span className="text-[#d4ff00] font-black italic">High-Performance API Engineer</span> & <span className="text-white font-black italic underline decoration-[#d4ff00] underline-offset-[12px]">Automation Specialist</span>.
+            <span className="text-[#00f0ff] font-black italic">High-Performance API Engineer</span> & <span className="text-white font-black italic underline decoration-[#00f0ff] underline-offset-[12px]">Automation Specialist</span>.
           </p>
         </motion.div>
 
@@ -91,8 +91,8 @@ const Hero: React.FC = () => {
             href="#contact" 
             className="interactive group relative px-10 py-5 overflow-hidden rounded-full transition-all block"
           >
-            <div className="absolute inset-0 bg-[#d4ff00] translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out"></div>
-            <div className="absolute inset-0 border border-white/20 rounded-full group-hover:border-[#d4ff00] transition-colors"></div>
+            <div className="absolute inset-0 bg-[#00f0ff] translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out"></div>
+            <div className="absolute inset-0 border border-white/20 rounded-full group-hover:border-[#00f0ff] transition-colors"></div>
             <span className="relative z-10 text-white group-hover:text-black font-jakarta font-black uppercase text-[10px] md:text-xs tracking-[0.3em] flex items-center gap-4 transition-colors">
               Start a Project <span className="text-xl transform group-hover:translate-x-2 transition-transform">→</span>
             </span>

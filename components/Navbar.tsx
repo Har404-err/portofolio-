@@ -19,7 +19,7 @@ const Navbar: React.FC = () => {
           animate={{ opacity: 1, x: 0 }}
         >
           <a href="#" className="font-jakarta text-xl md:text-2xl font-black tracking-tighter interactive text-white uppercase">
-            MUH4RHQ<span className="text-[#d4ff00]">&gt;</span>
+            MUH4RHQ<span className="text-[#00f0ff]">&gt;</span>
           </a>
         </motion.div>
         
@@ -32,7 +32,7 @@ const Navbar: React.FC = () => {
             <a 
               key={item} 
               href={`#${item.toLowerCase()}`} 
-              className="text-[9px] md:text-[11px] uppercase tracking-[0.3em] md:tracking-[0.5em] font-black text-white/50 hover:text-[#d4ff00] transition-all interactive"
+              className="text-[9px] md:text-[11px] uppercase tracking-[0.3em] md:tracking-[0.5em] font-black text-white/50 hover:text-[#00f0ff] transition-all interactive"
             >
               {item}
             </a>
