@@ -1,12 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Button, 
-  Input, 
-  Tooltip,
-  Card,
-  CardContent
-} from "@heroui/react";
 import { Play, Pause, Search, Loader2 } from 'lucide-react';
 
 interface Track {
@@ -119,87 +112,56 @@ const MusicPlayer: React.FC = () => {
                 initial={{ opacity: 0, y: 20, scale: 0.9 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: 20, scale: 0.9 }}
+                className="mc-panel-dark w-72 p-4"
             >
-                <Card className="bg-background/80 backdrop-blur-xl border border-white/10 w-72 shadow-2xl">
-                    <CardContent className="p-3">
-                        <form onSubmit={handleSearch} className="flex gap-2">
-                            <Input 
-                                size="sm"
-                                placeholder="Cari lagu..." 
-                                value={query}
-                                onChange={(e) => setQuery(e.target.value)}
-                                classNames={{
-                                    inputWrapper: "bg-white/5 border-white/10 group-data-[focus=true]:border-primary",
-                                }}
-                            />
-                            <Button 
-                                isIconOnly
-                                size="sm"
-                                color="primary" 
-                                type="submit" 
-                                isLoading={loading}
-                            >
-                                <Search size={16} />
-                            </Button>
-                        </form>
-                    </CardContent>
-                </Card>
+                <form onSubmit={handleSearch} className="flex gap-2">
+                    <input 
+                        type="text"
+                        placeholder="Search track..." 
+                        value={query}
+                        onChange={(e) => setQuery(e.target.value)}
+                        className="bg-mc-obsidian text-white font-vt323 text-lg p-2 flex-grow mc-border outline-none focus:border-mc-diamond"
+                    />
+                    <button 
+                        type="submit" 
+                        disabled={loading}
+                        className="mc-btn mc-btn-primary px-3 py-2"
+                    >
+                        {loading ? <Loader2 className="animate-spin w-4 h-4" /> : <Search className="w-4 h-4" />}
+                    </button>
+                </form>
             </motion.div>
         )}
       </AnimatePresence>
 
       <motion.div
         layout
-        className="bg-background/60 backdrop-blur-xl border border-white/10 rounded-full flex items-center p-1.5 transition-all duration-500"
-        style={{ boxShadow: isPlaying ? '0 0 30px rgba(0, 240, 255, 0.2)' : 'none' }}
+        className="mc-panel-dark flex items-center p-2 gap-4 shadow-[8px_8px_0_rgba(0,0,0,0.5)]"
       >
-        <Tooltip content={isPlaying ? "Pause" : "Play"}>
-            <Button
-                isIconOnly
-                radius="full"
-                className="relative w-12 h-12 flex-shrink-0 bg-transparent overflow-hidden"
-                onClick={togglePlay}
-            >
-                <motion.div
-                    animate={{ rotate: isPlaying ? 360 : 0 }}
-                    transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-                    className="absolute inset-0"
-                >
-                    <img 
-                        src={track.image} 
-                        alt="Art"
-                        className={`w-full h-full object-cover opacity-60 ${!isPlaying && 'grayscale'}`}
-                    />
-                </motion.div>
-                <div className="relative z-10 text-primary drop-shadow-lg">
-                    {audioLoading ? (
-                        <Loader2 className="animate-spin w-5 h-5" />
-                    ) : isPlaying ? (
-                        <Pause fill="currentColor" size={18} />
-                    ) : (
-                        <Play fill="currentColor" size={18} className="ml-1" />
-                    )}
-                </div>
-            </Button>
-        </Tooltip>
+        <button
+            className="w-12 h-12 flex-shrink-0 bg-mc-stone mc-border flex items-center justify-center hover:bg-mc-diamond transition-colors text-black"
+            onClick={togglePlay}
+        >
+            {audioLoading ? (
+                <Loader2 className="animate-spin w-6 h-6" />
+            ) : isPlaying ? (
+                <Pause fill="currentColor" size={20} />
+            ) : (
+                <Play fill="currentColor" size={20} className="ml-1" />
+            )}
+        </button>
 
-        <div className="flex flex-col justify-center whitespace-nowrap ml-4 mr-2 overflow-hidden w-24 md:w-32">
-            <span className="text-[10px] font-black uppercase text-primary tracking-wider truncate">{track.title}</span>
-            <span className="text-[9px] text-white/50 font-mono truncate">{track.artist}</span>
+        <div className="flex flex-col justify-center whitespace-nowrap overflow-hidden w-28 md:w-36">
+            <span className="text-xs font-pixel text-mc-diamond truncate">{track.title}</span>
+            <span className="text-lg font-vt323 text-white/70 truncate mt-1">{track.artist}</span>
         </div>
 
-        <Tooltip content="Cari Lagu">
-            <Button
-                isIconOnly
-                variant="light"
-                radius="full"
-                size="sm"
-                className={`${showSearch ? 'text-primary' : 'text-white/30'}`}
-                onClick={() => setShowSearch(!showSearch)}
-            >
-                <Search size={18} />
-            </Button>
-        </Tooltip>
+        <button
+            className={`w-10 h-10 flex-shrink-0 flex items-center justify-center mc-border hover:bg-mc-stone transition-colors ${showSearch ? 'bg-mc-stone text-black' : 'bg-transparent text-white'}`}
+            onClick={() => setShowSearch(!showSearch)}
+        >
+            <Search size={18} />
+        </button>
       </motion.div>
     </div>
   );

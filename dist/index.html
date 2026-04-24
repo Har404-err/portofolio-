@@ -1,118 +1,54 @@
 <!DOCTYPE html>
-<html lang="en" class="dark dark:bg-[#030712]" style="scroll-behavior: smooth;">
+<html lang="en" class="dark dark:bg-[#000000]" style="scroll-behavior: smooth;">
 <head>
     <meta charset="UTF-8">
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MUH4RHQ | API Engineer & Bot Dev</title>
+    <title>MUH4RHQ | Engineering Portfolio</title>
     
-    <meta name="description" content="Official portfolio of MUH4RHQ. High-Performance API Engineer & Bot Developer with a Cyber-Tech aesthetic.">
-    
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&family=Plus+Jakarta+Sans:wght@800&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Geist:wght@100..900&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --neon: #00f0ff;
-            --bg: #030712;
+            --bg: #000000;
+            --accent: #ffffff;
+            --border: rgba(255, 255, 255, 0.08);
         }
         body {
-            cursor: none;
+            background-color: var(--bg);
+            color: #ffffff;
+            font-family: 'Geist', 'Inter', sans-serif;
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
-            background-color: var(--bg);
-        }
-        
-        .noise {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none;
-            opacity: 0.05;
-            z-index: 9999;
-            background-image: url('https://grainy-gradients.vercel.app/noise.svg');
         }
 
-        .grid-bg {
+        /* Subtle Radial Gradient Background */
+        .bg-glow {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background-image: linear-gradient(to right, rgba(0, 240, 255, 0.03) 1px, transparent 1px),
-                              linear-gradient(to bottom, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
-            background-size: 100px 100px;
+            background: radial-gradient(circle at 50% -20%, #111111 0%, #000000 70%);
             z-index: -1;
-            pointer-events: none;
-        }
-
-        #custom-cursor {
-            width: 8px;
-            height: 8px;
-            background: var(--neon);
-            border-radius: 50%;
-            position: fixed;
-            pointer-events: none;
-            z-index: 10000;
-            transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1), height 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.08s linear, background 0.3s;
-            transform: translate(-50%, -50%);
-        }
-        
-        #cursor-follower {
-            width: 44px;
-            height: 44px;
-            border: 1px solid rgba(0, 240, 255, 0.3);
-            border-radius: 50%;
-            position: fixed;
-            pointer-events: none;
-            z-index: 9999;
-            transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1), height 0.4s cubic-bezier(0.16, 1, 0.3, 1), left 0.2s cubic-bezier(0.16, 1, 0.3, 1), top 0.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s;
-            transform: translate(-50%, -50%);
-        }
-
-        .cursor-hover #custom-cursor {
-            width: 100px;
-            height: 100px;
-            background: var(--neon);
-            mix-blend-mode: difference;
-        }
-        
-        .cursor-hover #cursor-follower {
-            width: 120px;
-            height: 120px;
-            opacity: 0;
         }
 
         ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #030712; }
-        ::-webkit-scrollbar-thumb { background: rgba(0, 240, 255, 0.3); border-radius: 10px; border: 1px solid #030712; }
-        ::-webkit-scrollbar-thumb:hover { background: rgba(0, 240, 255, 0.8); }
-
-        @keyframes scan {
-            0% { transform: translateY(-100%); }
-            100% { transform: translateY(100%); }
-        }
-        .scanline {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 2px;
-            background: linear-gradient(to right, transparent, rgba(0, 240, 255, 0.1), transparent);
-            z-index: 9998;
-            pointer-events: none;
-            animation: scan 8s linear infinite;
-        }
+        ::-webkit-scrollbar-track { background: #000; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #555; }
 
         * {
           outline: none !important;
           -webkit-tap-highlight-color: transparent;
         }
     </style>
-  <script type="module" crossorigin src="/assets/index-BvrfYbUo.js"></script>
-  <link rel="modulepreload" crossorigin href="/assets/framer-BaJ9-H6E.js">
-  <link rel="modulepreload" crossorigin href="/assets/vendor-D5NkyA9C.js">
-  <link rel="stylesheet" crossorigin href="/assets/index-C_9Na5_8.css">
+  <script type="module" crossorigin src="/assets/index-mMloH7fb.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/framer-CFsEghGm.js">
+  <link rel="modulepreload" crossorigin href="/assets/vendor-B5XTYmWm.js">
+  <link rel="stylesheet" crossorigin href="/assets/index-Cr83h21M.css">
 </head>
 <body>
-    <div class="noise"></div>
-    <div class="grid-bg"></div>
-    <div class="scanline"></div>
-    <div id="custom-cursor"></div>
-    <div id="cursor-follower"></div>
+    <div class="bg-glow"></div>
     <div id="root"></div>
 </body>
 </html>

@@ -1,23 +1,35 @@
 @import "tailwindcss";
 
 @theme {
-  --font-jakarta: "Plus Jakarta Sans", sans-serif;
+  --font-geist: "Geist", sans-serif;
   --font-inter: "Inter", sans-serif;
-  --color-primary: #00f0ff;
-  --color-background: #030712;
+  
+  --color-primary: #ffffff;
+  --color-secondary: #0070f3;
+  --color-background: #000000;
+  --color-muted: #888888;
+  --color-border: rgba(255, 255, 255, 0.08);
 }
 
 @layer base {
   body {
-    @apply bg-background text-white;
-    font-family: var(--font-inter);
+    @apply bg-background text-white antialiased;
+    font-family: var(--font-geist);
   }
 }
 
-.font-jakarta {
-  font-family: var(--font-jakarta);
+.bento-card {
+  @apply relative overflow-hidden bg-[#0a0a0a] border border-border rounded-[2rem] p-8 transition-all duration-500 hover:border-white/20;
 }
 
-.interactive {
-  @apply transition-all duration-300;
+.glass-navbar {
+  @apply bg-black/50 backdrop-blur-md border-b border-white/5;
+}
+
+.text-gradient {
+  @apply bg-clip-text text-transparent bg-gradient-to-b from-white to-white/40;
+}
+
+.btn-shiny {
+  @apply relative inline-flex items-center justify-center px-8 py-3 font-bold text-black transition-all duration-200 bg-white rounded-full hover:bg-white/90;
 }
