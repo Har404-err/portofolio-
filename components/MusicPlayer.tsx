@@ -109,23 +109,23 @@ const MusicPlayer: React.FC = () => {
       <AnimatePresence>
         {showSearch && (
             <motion.div 
-                initial={{ opacity: 0, y: 20, scale: 0.9 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: 20, scale: 0.9 }}
-                className="bg-[#0a0a0a] border border-white/10 rounded-2xl w-72 p-4 shadow-2xl backdrop-blur-xl"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 20 }}
+                className="bg-black border border-white/20 w-72 p-4 shadow-2xl backdrop-blur-xl"
             >
                 <form onSubmit={handleSearch} className="flex gap-2">
                     <input 
                         type="text"
-                        placeholder="Search track..." 
+                        placeholder="SEARCH_TRACK..." 
                         value={query}
                         onChange={(e) => setQuery(e.target.value)}
-                        className="bg-white/5 text-white text-sm p-3 flex-grow rounded-xl outline-none border border-white/5 focus:border-white/20 transition-all"
+                        className="bg-white/5 text-white text-[10px] p-3 flex-grow outline-none border border-white/10 focus:border-white/30 transition-all font-bold"
                     />
                     <button 
                         type="submit" 
                         disabled={loading}
-                        className="p-3 bg-white text-black rounded-xl hover:bg-white/90 transition-all disabled:opacity-50"
+                        className="p-3 bg-white text-black hover:bg-white/90 transition-all disabled:opacity-50"
                     >
                         {loading ? <Loader2 className="animate-spin w-4 h-4" /> : <Search className="w-4 h-4" />}
                     </button>
@@ -136,10 +136,10 @@ const MusicPlayer: React.FC = () => {
 
       <motion.div
         layout
-        className="bg-black/60 backdrop-blur-xl border border-white/10 rounded-full flex items-center p-2 gap-4 shadow-xl"
+        className="bg-black/80 backdrop-blur-xl border border-white/10 flex items-center p-2 gap-4 shadow-xl"
       >
         <button
-            className="w-10 h-10 flex-shrink-0 bg-white text-black rounded-full flex items-center justify-center hover:scale-105 active:scale-95 transition-all shadow-[0_0_15px_rgba(255,255,255,0.2)]"
+            className="w-10 h-10 flex-shrink-0 bg-white text-black flex items-center justify-center hover:bg-white/90 transition-all"
             onClick={togglePlay}
         >
             {audioLoading ? (
@@ -152,12 +152,12 @@ const MusicPlayer: React.FC = () => {
         </button>
 
         <div className="flex flex-col justify-center whitespace-nowrap overflow-hidden w-24 md:w-32">
-            <span className="text-[10px] font-bold uppercase text-white truncate tracking-wider">{track.title}</span>
-            <span className="text-[9px] text-white/40 truncate mt-0.5 uppercase tracking-tighter">{track.artist}</span>
+            <span className="text-[9px] font-black uppercase text-white truncate tracking-wider">{track.title}</span>
+            <span className="text-[8px] text-white/40 truncate mt-0.5 uppercase tracking-[0.2em]">{track.artist}</span>
         </div>
 
         <button
-            className={`w-8 h-8 flex-shrink-0 flex items-center justify-center rounded-full hover:bg-white/10 transition-all ${showSearch ? 'text-white' : 'text-white/20'}`}
+            className={`w-8 h-8 flex-shrink-0 flex items-center justify-center border border-transparent hover:border-white/20 transition-all ${showSearch ? 'text-white' : 'text-white/20'}`}
             onClick={() => setShowSearch(!showSearch)}
         >
             <Search size={14} />

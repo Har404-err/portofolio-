@@ -17,18 +17,18 @@ const Stack: React.FC = () => {
     <section id="stack" className="py-24 px-6 bg-black">
       <div className="container mx-auto max-w-5xl">
         <div className="mb-16">
-          <h2 className="text-3xl font-bold mb-4">Tech Inventory</h2>
-          <p className="text-white/40 max-w-md">Selected technologies I use to build production-grade systems.</p>
+          <h2 className="text-4xl font-black mb-4 uppercase tracking-tighter">Technology Stack</h2>
+          <p className="text-white/30 max-w-md text-xs font-bold uppercase tracking-widest">Selected instruments for high-performance production environments.</p>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-px bg-white/5 border border-white/5 overflow-hidden rounded-3xl">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-px bg-white/10 border border-white/10 overflow-hidden">
           {stack.map((item, i) => (
             <div 
               key={item.name}
-              className="bg-black p-10 flex flex-col items-center justify-center group hover:bg-white/[0.02] transition-colors duration-500"
+              className="bg-black p-12 flex flex-col items-center justify-center group hover:bg-white transition-all duration-300"
             >
-              <i className={`${item.icon} text-4xl mb-4 grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-500`}></i>
-              <span className="text-[10px] font-bold uppercase tracking-widest text-white/20 group-hover:text-white transition-colors">{item.name}</span>
+              <i className={`${item.icon} text-5xl mb-6 grayscale group-hover:grayscale-0 group-hover:text-black transition-all duration-300`}></i>
+              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30 group-hover:text-black transition-colors">{item.name}</span>
             </div>
           ))}
         </div>

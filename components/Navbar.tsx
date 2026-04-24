@@ -12,17 +12,17 @@ const Navbar: React.FC = () => {
   }, []);
 
   return (
-    <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${scrolled ? 'py-4' : 'py-8'}`}>
-      <div className={`mx-auto max-w-5xl w-full flex justify-between items-center transition-all duration-500 px-6 py-3 ${scrolled ? 'bg-white/5 backdrop-blur-xl border border-white/10 rounded-full' : ''}`}>
+    <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${scrolled ? 'py-0' : 'py-4'}`}>
+      <div className={`mx-auto max-w-5xl w-full flex justify-between items-center transition-all duration-500 px-6 py-4 ${scrolled ? 'bg-black/90 backdrop-blur-xl border-x border-b border-white/10' : 'border-b border-white/5'}`}>
         <motion.div 
           initial={{ opacity: 0, x: -10 }}
           animate={{ opacity: 1, x: 0 }}
-          className="flex items-center gap-2"
+          className="flex items-center gap-3"
         >
-          <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center overflow-hidden">
-             <div className="w-3 h-3 bg-black rounded-full animate-pulse"></div>
+          <div className="w-6 h-6 bg-white flex items-center justify-center overflow-hidden">
+             <div className="w-3 h-3 bg-black animate-pulse"></div>
           </div>
-          <span className="font-bold tracking-tight text-lg">MUH4RHQ</span>
+          <span className="font-bold tracking-tighter text-xl">MUH4RHQ</span>
         </motion.div>
         
         <nav className="hidden md:flex items-center gap-8">
@@ -30,7 +30,7 @@ const Navbar: React.FC = () => {
             <a 
               key={item} 
               href={`#${item.toLowerCase()}`} 
-              className="text-sm font-medium text-white/50 hover:text-white transition-colors"
+              className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/50 hover:text-white transition-colors"
             >
               {item}
             </a>
@@ -42,9 +42,9 @@ const Navbar: React.FC = () => {
             as="a"
             href="#contact" 
             variant="bordered"
-            className="rounded-full border-white/10 text-white hover:bg-white hover:text-black transition-all px-6 h-10 text-xs font-bold"
+            className="rounded-none border-white/20 text-white hover:bg-white hover:text-black transition-all px-6 h-11 text-[10px] font-bold uppercase tracking-widest"
           >
-            Work with me
+            Connect
           </Button>
         </div>
       </div>

@@ -1,29 +1,29 @@
 @import "tailwindcss";
 
 @theme {
-  --font-geist: "Geist", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
   --font-inter: "Inter", sans-serif;
   
   --color-primary: #ffffff;
   --color-secondary: #0070f3;
   --color-background: #000000;
   --color-muted: #888888;
-  --color-border: rgba(255, 255, 255, 0.08);
+  --color-border: rgba(255, 255, 255, 0.15);
 }
 
 @layer base {
   body {
     @apply bg-background text-white antialiased;
-    font-family: var(--font-geist);
+    font-family: var(--font-mono);
   }
 }
 
 .bento-card {
-  @apply relative overflow-hidden bg-[#0a0a0a] border border-border rounded-[2rem] p-8 transition-all duration-500 hover:border-white/20;
+  @apply relative overflow-hidden bg-black border border-border p-8 transition-all duration-300 hover:bg-white/[0.02];
 }
 
 .glass-navbar {
-  @apply bg-black/50 backdrop-blur-md border-b border-white/5;
+  @apply bg-black/80 backdrop-blur-md border border-white/10;
 }
 
 .text-gradient {
@@ -31,5 +31,5 @@
 }
 
 .btn-shiny {
-  @apply relative inline-flex items-center justify-center px-8 py-3 font-bold text-black transition-all duration-200 bg-white rounded-full hover:bg-white/90;
+  @apply relative inline-flex items-center justify-center px-8 py-3 font-bold text-black transition-all duration-200 bg-white hover:bg-white/90;
 }
