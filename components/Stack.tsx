@@ -1,98 +1,67 @@
-
 import React from 'react';
 import { motion } from 'framer-motion';
-
-const stackTop = [
-  { name: 'NodeJS', icon: 'devicon-nodejs-plain' },
-  { name: 'Baileys', icon: 'devicon-npm-original-wordmark' },
-  { name: 'Express', icon: 'devicon-express-original' },
-  { name: 'TypeScript', icon: 'devicon-typescript-plain' },
-  { name: 'JavaScript', icon: 'devicon-javascript-plain' },
-  { name: 'React', icon: 'devicon-react-original' },
-];
-
-const stackBottom = [
-  { name: 'SQLite', icon: 'devicon-sqlite-plain' },
-  { name: 'MongoDB', icon: 'devicon-mongodb-plain' },
-  { name: 'MySQL', icon: 'devicon-mysql-plain' },
-  { name: 'HTML5', icon: 'devicon-html5-plain' },
-  { name: 'CSS3', icon: 'devicon-css3-plain' },
-  { name: 'Tailwind', icon: 'devicon-tailwindcss-plain' },
-];
+import { Card, CardFooter } from "@heroui/react";
+import { Layers } from 'lucide-react';
 
 const Stack: React.FC = () => {
+  const stack = [
+    { name: 'Node.js', icon: 'devicon-nodejs-plain colored', category: 'Runtime' },
+    { name: 'TypeScript', icon: 'devicon-typescript-plain colored', category: 'Language' },
+    { name: 'PostgreSQL', icon: 'devicon-postgresql-plain colored', category: 'Database' },
+    { name: 'Redis', icon: 'devicon-redis-plain colored', category: 'Caching' },
+    { name: 'Docker', icon: 'devicon-docker-plain colored', category: 'DevOps' },
+    { name: 'Express', icon: 'devicon-express-original', category: 'Framework' },
+    { name: 'Vite', icon: 'devicon-vitejs-plain colored', category: 'Bundler' },
+    { name: 'Git', icon: 'devicon-git-plain colored', category: 'VCS' },
+  ];
+
   return (
-    <section id="stack" className="py-32 md:py-56 bg-[#030712] overflow-hidden">
-      <div className="container mx-auto px-6 lg:px-20 mb-20 md:mb-32 flex flex-col md:flex-row md:items-end justify-between gap-10">
-        <div className="w-full">
-            <h2 className="font-jakarta text-6xl md:text-8xl lg:text-[10rem] font-black uppercase tracking-tighter leading-none text-white">
-              CORE <br/> <span className="text-[#00f0ff]">STACK</span>
+    <section id="stack" className="py-24 md:py-48 px-6 lg:px-20 bg-background relative">
+      <div className="container mx-auto max-w-7xl">
+        <div className="flex flex-col md:flex-row justify-between items-end mb-20 gap-10">
+          <motion.div
+            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, y: 20 }}
+            viewport={{ once: true }}
+            className="max-w-2xl"
+          >
+            <div className="flex items-center gap-4 mb-8">
+              <Layers className="text-primary w-6 h-6" />
+              <span className="text-[10px] uppercase font-black tracking-[0.6em] text-primary">Tech Stack</span>
+            </div>
+            <h2 className="font-jakarta text-5xl md:text-8xl font-black uppercase text-white tracking-tighter leading-[0.8]">
+              MY <br /> <span className="text-white/20">WEAPONS.</span>
             </h2>
+          </motion.div>
+          <p className="text-white/40 text-lg md:text-xl max-w-sm font-medium mb-2 leading-tight">
+            Alat dan teknologi yang saya gunakan untuk mengubah ide menjadi kenyataan yang scalable.
+          </p>
         </div>
-        <div className="max-w-xs md:text-right">
-            <p className="text-white/40 font-mono text-[10px] uppercase tracking-[0.3em] mb-4">Tech Audit — 2026</p>
-            <p className="text-base md:text-lg text-white font-light italic">Technologies selected for scalability, ease of maintenance, and high performance.</p>
-        </div>
-      </div>
 
-      {/* Top Row Marquee */}
-      <div className="relative flex overflow-hidden py-10 md:py-14 border-y border-white/5 bg-white/[0.01]">
-        <motion.div 
-          animate={{ x: [0, -1200] }}
-          transition={{ repeat: Infinity, duration: 25, ease: "linear" }}
-          className="flex gap-16 md:gap-24 items-center whitespace-nowrap px-12"
-        >
-          {[...stackTop, ...stackTop, ...stackTop].map((item, idx) => (
-            <div 
-              key={`${item.name}-${idx}`}
-              className="group flex items-center gap-6 md:gap-8 interactive"
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 mt-20">
+          {stack.map((item, i) => (
+            <motion.div
+              key={item.name}
+              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, y: 20 }}
+              transition={{ delay: i * 0.1 }}
+              viewport={{ once: true }}
             >
-              <i className={`${item.icon} text-5xl md:text-9xl text-white opacity-10 group-hover:opacity-100 group-hover:text-[#00f0ff] group-hover:scale-110 group-hover:drop-shadow-[0_0_15px_rgba(0,240,255,0.8)] transition-all duration-700`}></i>
-              <span className="font-jakarta text-3xl md:text-8xl font-black uppercase text-white/5 group-hover:text-white transition-colors">
-                {item.name}
-              </span>
-              <span className="text-[#00f0ff] text-2xl md:text-4xl opacity-10">✦</span>
-            </div>
+              <Card 
+                isFooterBlurred
+                className="bg-white/5 border-white/10 hover:border-primary/50 transition-all group overflow-hidden"
+                shadow="none"
+              >
+                <div className="h-48 flex items-center justify-center p-12 bg-gradient-to-br from-white/[0.02] to-transparent">
+                  <i className={`${item.icon} text-6xl md:text-8xl transition-transform duration-500 group-hover:scale-110 opacity-80 group-hover:opacity-100`}></i>
+                </div>
+                <CardFooter className="justify-between before:bg-white/10 border-white/20 border-1 overflow-hidden py-3 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10">
+                  <p className="text-[10px] text-white/80 uppercase font-black tracking-widest">{item.name}</p>
+                  <p className="text-[9px] text-primary font-black uppercase tracking-widest bg-primary/10 px-2 py-1 rounded-md">{item.category}</p>
+                </CardFooter>
+              </Card>
+            </motion.div>
           ))}
-        </motion.div>
-      </div>
-
-      {/* Bottom Row Marquee (Reverse) */}
-      <div className="relative flex overflow-hidden py-10 md:py-14 border-b border-white/5">
-        <motion.div 
-          animate={{ x: [-1200, 0] }}
-          transition={{ repeat: Infinity, duration: 30, ease: "linear" }}
-          className="flex gap-16 md:gap-24 items-center whitespace-nowrap px-12"
-        >
-          {[...stackBottom, ...stackBottom, ...stackBottom].map((item, idx) => (
-            <div 
-              key={`${item.name}-${idx}`}
-              className="group flex items-center gap-6 md:gap-8 interactive"
-            >
-              <i className={`${item.icon} text-5xl md:text-9xl text-white opacity-10 group-hover:opacity-100 group-hover:text-[#00f0ff] group-hover:scale-110 group-hover:drop-shadow-[0_0_15px_rgba(0,240,255,0.8)] transition-all duration-700`}></i>
-              <span className="font-jakarta text-3xl md:text-8xl font-black uppercase text-white/5 group-hover:text-white transition-colors">
-                {item.name}
-              </span>
-              <span className="text-[#00f0ff] text-2xl md:text-4xl opacity-10">/</span>
-            </div>
-          ))}
-        </motion.div>
-      </div>
-
-      <div className="mt-24 md:mt-40 container mx-auto px-6 lg:px-20 grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-12">
-        <div className="md:col-span-2">
-            <span className="text-[10px] md:text-[11px] uppercase font-black tracking-[0.4em] md:tracking-[0.6em] text-[#00f0ff] mb-4 md:mb-6 block">The Philosophy</span>
-            <p className="text-2xl md:text-3xl font-light text-white leading-tight">
-                I don't just write code; I engineer <span className="font-black italic">scalable ecosystems</span> designed to handle real-world complexity.
-            </p>
-        </div>
-        <div className="p-8 bg-white/5 rounded-2xl flex flex-col justify-between border border-white/5 group hover:border-[#00f0ff]/30 transition-all min-h-[140px]">
-            <span className="text-3xl md:text-4xl font-black text-white group-hover:text-[#00f0ff]">99.9%</span>
-            <span className="text-[9px] md:text-[10px] uppercase font-bold tracking-widest text-white/40">Uptime Focus</span>
-        </div>
-        <div className="p-8 bg-white/5 rounded-2xl flex flex-col justify-between border border-white/5 group hover:border-[#00f0ff]/30 transition-all min-h-[140px]">
-            <span className="text-3xl md:text-4xl font-black text-white group-hover:text-[#00f0ff]">50ms</span>
-            <span className="text-[9px] md:text-[10px] uppercase font-bold tracking-widest text-white/40">Response Goal</span>
         </div>
       </div>
     </section>

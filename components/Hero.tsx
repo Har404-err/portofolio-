@@ -1,5 +1,7 @@
-import React, { useRef } from 'react';
-import { motion, useScroll, useTransform, useSpring, Variants } from 'framer-motion';
+import React from 'react';
+import { motion, useScroll, useTransform, Variants } from 'framer-motion';
+import { Button } from "@heroui/react";
+import { ArrowUpRight } from 'lucide-react';
 
 const Hero: React.FC = () => {
   const { scrollY } = useScroll();
@@ -32,21 +34,21 @@ const Hero: React.FC = () => {
   };
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center px-4 md:px-6 lg:px-20 overflow-hidden bg-[#030712]">
-      {/* Background Profile Layer - Editorial Aesthetic in Full Color */}
+    <section className="relative min-h-screen flex items-center justify-center px-4 md:px-6 lg:px-20 overflow-hidden bg-background">
+      {/* Background Profile Layer */}
       <motion.div 
         style={{ y: yImage, scale, opacity }}
         className="absolute inset-0 z-0 pointer-events-none flex items-center justify-center p-6 md:p-20"
       >
-        <div className="relative w-full max-w-6xl h-full filter contrast-[1.1] brightness-[0.7] transition-all duration-1000">
+        <div className="relative w-full max-w-6xl h-full filter contrast-[1.1] brightness-[0.7]">
           <img 
-            src="https://c.termai.cc/i161/eVaNqs7.jpg" 
+            src="https://i.imgur.com/zJcjQlC.jpeg" 
             alt="MUH4RHQ" 
             className="w-full h-full object-cover rounded-[50px] md:rounded-[100px]"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#030712] via-transparent to-[#030712]"></div>
-          <div className="absolute inset-0 bg-gradient-to-r from-[#030712] via-transparent to-[#030712]"></div>
-          <div className="absolute inset-0 bg-[#030712]/30"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-background via-transparent to-background"></div>
+          <div className="absolute inset-0 bg-background/30"></div>
         </div>
       </motion.div>
 
@@ -58,14 +60,14 @@ const Hero: React.FC = () => {
         className="relative z-10 w-full max-w-7xl mx-auto flex flex-col items-center text-center py-20"
       >
         <motion.div variants={itemVariants} className="mb-6 flex items-center gap-4">
-          <span className="w-8 md:w-16 h-px bg-[#00f0ff]/50"></span>
-          <span className="text-[10px] md:text-[11px] font-black uppercase tracking-[1em] text-[#00f0ff]">
+          <span className="w-8 md:w-16 h-px bg-primary/50"></span>
+          <span className="text-[10px] md:text-[11px] font-black uppercase tracking-[1em] text-primary">
             EST. MMXXV
           </span>
-          <span className="w-8 md:w-16 h-px bg-[#00f0ff]/50"></span>
+          <span className="w-8 md:w-16 h-px bg-primary/50"></span>
         </motion.div>
 
-        <motion.div style={{ y: yText }} className="relative reveal-text w-full">
+        <motion.div style={{ y: yText }} className="relative w-full">
           <motion.h1 
             variants={itemVariants}
             className="font-jakarta text-[14vw] md:text-[15vw] font-black leading-[0.8] tracking-[-0.08em] uppercase select-none text-white mix-blend-difference"
@@ -79,7 +81,7 @@ const Hero: React.FC = () => {
           className="mt-12 md:mt-20 max-w-3xl px-4"
         >
           <p className="text-xl md:text-3xl lg:text-4xl text-white/90 font-light tracking-tight leading-snug">
-            <span className="text-[#00f0ff] font-black italic">High-Performance API Engineer</span> & <span className="text-white font-black italic underline decoration-[#00f0ff] underline-offset-[12px]">Automation Specialist</span>.
+            <span className="text-primary font-black italic">High-Performance API Engineer</span> & <span className="text-white font-black italic underline decoration-primary underline-offset-[12px]">Automation Specialist</span>.
           </p>
         </motion.div>
 
@@ -87,16 +89,17 @@ const Hero: React.FC = () => {
           variants={itemVariants}
           className="mt-16 md:mt-24"
         >
-          <a 
-            href="#contact" 
-            className="interactive group relative px-10 py-5 overflow-hidden rounded-full transition-all block hover:shadow-[0_0_30px_rgba(0,240,255,0.4)]"
+          <Button 
+            as="a"
+            href="#contact"
+            color="primary"
+            variant="shadow"
+            size="lg"
+            endContent={<ArrowUpRight className="w-5 h-5" />}
+            className="font-jakarta font-black uppercase text-[10px] md:text-xs tracking-[0.3em] h-16 px-12 rounded-full"
           >
-            <div className="absolute inset-0 bg-[#00f0ff] translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out"></div>
-            <div className="absolute inset-0 border border-white/20 rounded-full group-hover:border-[#00f0ff] transition-colors"></div>
-            <span className="relative z-10 text-white group-hover:text-black font-jakarta font-black uppercase text-[10px] md:text-xs tracking-[0.3em] flex items-center gap-4 transition-colors">
-              Start a Project <span className="text-xl transform group-hover:translate-x-2 transition-transform">→</span>
-            </span>
-          </a>
+            Connect With Me
+          </Button>
         </motion.div>
       </motion.div>
     </section>

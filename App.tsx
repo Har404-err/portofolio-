@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import Hero from './components/Hero';
 import About from './components/About';
@@ -20,7 +19,6 @@ const App: React.FC = () => {
     const dot = document.getElementById('custom-cursor');
     const ring = document.getElementById('cursor-follower');
     
-    // Helper untuk set posisi & visibilitas
     const setCursor = (x: number, y: number, visible: boolean) => {
         if (!dot || !ring) return;
         
@@ -35,10 +33,8 @@ const App: React.FC = () => {
         }
     };
 
-    // Desktop Mouse
     const onMouseMove = (e: MouseEvent) => setCursor(e.clientX, e.clientY, true);
     
-    // Mobile Touch (Restored Dragging)
     const onTouchStart = (e: TouchEvent) => setCursor(e.touches[0].clientX, e.touches[0].clientY, true);
     const onTouchMove = (e: TouchEvent) => setCursor(e.touches[0].clientX, e.touches[0].clientY, true);
     const onTouchEnd = () => {
@@ -48,7 +44,6 @@ const App: React.FC = () => {
         }
     };
 
-    // Event Listeners
     window.addEventListener('mousemove', onMouseMove);
     window.addEventListener('touchstart', onTouchStart, { passive: true });
     window.addEventListener('touchmove', onTouchMove, { passive: true });
@@ -76,9 +71,9 @@ const App: React.FC = () => {
   }, []);
 
   return (
-    <div className="relative min-h-screen selection:bg-[#00f0ff] selection:text-black bg-[#030712]">
+    <div className="relative min-h-screen selection:bg-primary selection:text-black bg-background text-white">
       <motion.div 
-        className="fixed top-0 left-0 right-0 h-[4px] bg-[#00f0ff] z-[100] origin-left shadow-[0_0_15px_rgba(0, 240, 255,0.5)]"
+        className="fixed top-0 left-0 right-0 h-[4px] bg-primary z-[100] origin-left shadow-[0_0_15px_rgba(0,240,255,0.5)]"
         style={{ scaleX }}
       />
       
@@ -92,7 +87,7 @@ const App: React.FC = () => {
         <Contact />
       </main>
 
-      <footer className="pt-40 pb-20 px-6 lg:px-20 bg-[#030712] flex flex-col gap-20">
+      <footer className="pt-40 pb-20 px-6 lg:px-20 bg-background flex flex-col gap-20">
         <div className="w-full h-px bg-white/10"></div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-20">
            <div className="flex flex-col gap-6">
@@ -101,19 +96,19 @@ const App: React.FC = () => {
            </div>
            
            <div className="flex flex-col gap-6">
-              <span className="text-[10px] uppercase font-black tracking-widest text-[#00f0ff]">Navigation</span>
+              <span className="text-[10px] uppercase font-black tracking-widest text-primary">Navigation</span>
               <nav className="flex flex-col gap-3 font-bold uppercase text-sm">
-                 <a href="#about" className="hover:text-[#00f0ff] transition-colors interactive">About</a>
-                 <a href="#stack" className="hover:text-[#00f0ff] transition-colors interactive">Stack</a>
-                 <a href="#contact" className="hover:text-[#00f0ff] transition-colors interactive">Contact</a>
+                 <a href="#about" className="hover:text-primary transition-colors interactive">About</a>
+                 <a href="#stack" className="hover:text-primary transition-colors interactive">Stack</a>
+                 <a href="#contact" className="hover:text-primary transition-colors interactive">Contact</a>
               </nav>
            </div>
 
            <div className="flex flex-col gap-6 md:items-end">
-              <span className="text-[10px] uppercase font-black tracking-widest text-[#00f0ff]">Connect</span>
+              <span className="text-[10px] uppercase font-black tracking-widest text-primary">Connect</span>
               <div className="flex gap-6">
-                 <a href="https://github.com/Har404-err" target="_blank" className="font-bold text-white hover:text-[#00f0ff] transition-colors interactive uppercase">Github</a>
-                 <a href="https://wa.me/6282148570591" target="_blank" className="font-bold text-white hover:text-[#00f0ff] transition-colors interactive uppercase">Whatsapp</a>
+                 <a href="https://github.com/Har404-err" target="_blank" className="font-bold text-white hover:text-primary transition-colors interactive uppercase">Github</a>
+                 <a href="https://wa.me/6282148570591" target="_blank" className="font-bold text-white hover:text-primary transition-colors interactive uppercase">Whatsapp</a>
               </div>
            </div>
         </div>

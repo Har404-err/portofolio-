@@ -1,93 +1,82 @@
-
 import React from 'react';
 import { motion } from 'framer-motion';
+import { Card, CardContent, Chip, Separator } from "@heroui/react";
+import { User, Code2, Zap, Rocket } from 'lucide-react';
 
 const About: React.FC = () => {
-  return (
-    <section id="about" className="py-24 md:py-48 px-6 lg:px-20 relative bg-[#030712] overflow-hidden">
-      <div className="container mx-auto">
-        {/* Main Content Block: Heading and Description */}
-        <div className="flex flex-col gap-12 lg:gap-32">
-          
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-20">
-            {/* Main Heading */}
-            <motion.div
-              whileInView={{ opacity: 1, x: 0 }}
-              initial={{ opacity: 0, x: -50 }}
-              viewport={{ once: true }}
-              className="lg:col-span-8"
-            >
-              <h2 className="font-jakarta text-4xl md:text-6xl lg:text-8xl xl:text-[7rem] font-black tracking-[-0.07em] uppercase leading-[0.95] md:leading-[0.85] text-white">
-                DIGITAL <br/>
-                <span className="text-[#00f0ff] italic">ENGINEERING</span><br/>
-                EXCELLENCE
-              </h2>
-            </motion.div>
-            
-            {/* Description */}
-            <div className="lg:col-span-4 flex flex-col justify-end">
-               <motion.div
-                 whileInView={{ opacity: 1, y: 0 }}
-                 initial={{ opacity: 0, y: 30 }}
-                 viewport={{ once: true }}
-                 className="border-l-2 border-[#00f0ff] pl-6 lg:pl-8 h-fit"
-               >
-                  <p className="text-white/80 font-light text-lg md:text-xl leading-relaxed max-w-md">
-                    Obsessed with efficiency. I automate the boring stuff so you can focus on what matters.
-                  </p>
-                  <div className="mt-8 flex flex-wrap gap-3">
-                      <span className="px-4 py-1.5 rounded-full border border-white/10 text-[9px] uppercase font-black text-[#00f0ff] bg-[#00f0ff]/5">Automation</span>
-                      <span className="px-4 py-1.5 rounded-full border border-white/10 text-[9px] uppercase font-black text-white/40">REST API</span>
-                      <span className="px-4 py-1.5 rounded-full border border-white/10 text-[9px] uppercase font-black text-white/40">Bot Dev</span>
-                  </div>
-               </motion.div>
-            </div>
-          </div>
+  const stats = [
+    { icon: <Code2 className="text-primary" />, label: 'Experience', value: '1+ Years' },
+    { icon: <Zap className="text-primary" />, label: 'Success Rate', value: '99%' },
+    { icon: <Rocket className="text-primary" />, label: 'Projects', value: '20+' },
+  ];
 
-          {/* Info Cards Row */}
-          <motion.div 
-            whileInView={{ opacity: 1, y: 0 }}
-            initial={{ opacity: 0, y: 60 }}
+  const skills = [
+    'API Architecture', 'Node.js', 'Typescript', 'Automation', 
+    'Bot Development', 'Backend Systems', 'Microservices', 'Database Design'
+  ];
+
+  return (
+    <section id="about" className="py-24 md:py-48 px-6 lg:px-20 bg-background relative overflow-hidden text-white">
+      <div className="container mx-auto max-w-7xl">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+          <motion.div
+            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, x: -30 }}
             viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-            className="mt-12 md:mt-24 grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8"
           >
-            {[
-              {
-                num: '01',
-                title: 'LOGIC',
-                subtitle: 'Bot Architecture',
-                desc: 'Building intelligent WhatsApp bots and scalable backend systems using Node.js and Baileys.'
-              },
-              {
-                num: '02',
-                title: 'INTELLIGENCE',
-                subtitle: 'Applied AI Engineering',
-                desc: 'Orchestrating LLMs via API to build smart assistants. Connecting OpenAI, Gemini, and local models into real-world applications.'
-              },
-              {
-                num: '03',
-                title: 'LAUNCH',
-                subtitle: 'Production Ready',
-                desc: 'Optimized deployment for high-performance web apps and 24/7 active bot services.'
-              }
-            ].map((card, idx) => (
-              <div 
-                key={idx}
-                className="group relative p-8 lg:p-12 rounded-[30px] bg-white/[0.02] border border-white/5 hover:border-[#00f0ff]/30 group-hover:shadow-[0_0_30px_rgba(0,240,255,0.1)] transition-all duration-500 ease-out interactive overflow-hidden min-h-[350px] flex flex-col"
+            <div className="flex items-center gap-4 mb-8">
+              <User className="text-primary w-6 h-6" />
+              <span className="text-[10px] uppercase font-black tracking-[0.6em] text-primary">Identity</span>
+            </div>
+            
+            <h2 className="font-jakarta text-5xl md:text-7xl font-black uppercase text-white tracking-tighter leading-none mb-10">
+              BUILDING <br /> <span className="text-white/20">EFFICIENCY.</span>
+            </h2>
+            
+            <p className="text-xl md:text-2xl text-white/60 font-light leading-relaxed mb-12">
+              Saya adalah pengembang backend yang berfokus pada performa dan skalabilitas. 
+              Spesialisasi saya adalah membangun infrastruktur API yang kuat dan bot 
+              otomatisasi yang cerdas untuk mempercepat alur kerja bisnis.
+            </p>
+
+            <div className="flex flex-wrap gap-3">
+              {skills.map(skill => (
+                <Chip 
+                  key={skill}
+                  variant="bordered"
+                  color="primary"
+                  className="border-white/10 text-white font-bold uppercase text-[10px] tracking-widest px-4 py-6"
+                >
+                  {skill}
+                </Chip>
+              ))}
+            </div>
+          </motion.div>
+
+          <motion.div
+            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, x: 30 }}
+            viewport={{ once: true }}
+            className="grid grid-cols-1 gap-6"
+          >
+            {stats.map((stat, i) => (
+              <Card 
+                key={i}
+                className="bg-white/5 border-white/10 hover:border-primary/50 transition-colors"
               >
-                <div className="absolute -top-10 -right-10 w-32 h-32 bg-[#00f0ff]/5 rounded-full blur-[40px] group-hover:bg-[#00f0ff]/10 transition-all duration-700"></div>
-                
-                <div className="relative z-10">
-                  <span className="text-[10px] font-black tracking-[0.4em] text-[#00f0ff] mb-8 block uppercase">{card.num} / {card.title}</span>
-                  <h3 className="text-2xl lg:text-3xl font-black uppercase text-white leading-tight mb-6 group-hover:text-[#00f0ff] transition-colors">{card.subtitle}</h3>
-                </div>
-                
-                <div className="mt-auto relative z-10">
-                  <p className="text-white/40 group-hover:text-white/70 font-medium text-sm lg:text-base leading-relaxed transition-colors mb-8">{card.desc}</p>
-                  <div className="w-8 h-[2px] bg-white/10 group-hover:w-full group-hover:bg-[#00f0ff] transition-all duration-500"></div>
-                </div>
-              </div>
+                <CardContent className="p-8 flex flex-row items-center justify-between">
+                  <div className="flex items-center gap-6">
+                    <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center">
+                      {stat.icon}
+                    </div>
+                    <div>
+                      <p className="text-[10px] uppercase font-black tracking-widest text-white/30">{stat.label}</p>
+                      <p className="text-2xl font-jakarta font-black text-white">{stat.value}</p>
+                    </div>
+                  </div>
+                  <div className="text-primary/20 text-4xl font-black italic">0{i + 1}</div>
+                </CardContent>
+              </Card>
             ))}
           </motion.div>
         </div>

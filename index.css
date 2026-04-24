@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+@theme {
+  --font-jakarta: "Plus Jakarta Sans", sans-serif;
+  --font-inter: "Inter", sans-serif;
+  --color-primary: #00f0ff;
+  --color-background: #030712;
+}
+
+@layer base {
+  body {
+    @apply bg-background text-white;
+    font-family: var(--font-inter);
+  }
+}
+
+.font-jakarta {
+  font-family: var(--font-jakarta);
+}
+
+.interactive {
+  @apply transition-all duration-300;
+}
