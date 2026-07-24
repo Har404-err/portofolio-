@@ -5,84 +5,41 @@ export interface TrackResult {
   image: string;
 }
 
+const APIKEY = 'KYIO-APIKEY';
+
 const cleanTitle = (title: string): string => {
   return title
-    .replace(/\(Official Video\)|\[Official Video\]|Lyrics|Official Audio|\[Lyrics\]|\(Lyrics\)/gi, '')
+    .replace(/\(Official Video\)|\[Official Video\]|Lyrics|Official Audio|\[Lyrics\]|\(Lyrics\)|Remastered|\(Remastered\)/gi, '')
     .trim()
     .substring(0, 35);
 };
 
-// Engine 1: Convert1s
-async function fetchFromConvert1s(query: string): Promise<TrackResult | null> {
-  try {
-    const searchRes = await fetch(`https://yt-meta.convert1s.com/search?q=${encodeURIComponent(query)}`);
-    if (!searchRes.ok) return null;
-    const searchData = await searchRes.json();
-    
-    const firstItem = searchData.items?.[0];
-    if (!firstItem || !firstItem.id) return null;
-
-    const initRes = await fetch('https://hub.convert1s.com/api/download', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        url: firstItem.id,
-        os: 'windows',
-        output: { type: 'audio', format: 'mp3', quality: '128kbps' },
-        audio: { bitrate: '128k' }
-      })
-    });
-
-    if (!initRes.ok) return null;
-    const initData = await initRes.json();
-    const statusUrl = initData.statusUrl;
-    if (!statusUrl) return null;
-
-    // Polling status conversion (max 10 tries with 1.5s delay)
-    for (let i = 0; i < 10; i++) {
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      const statusRes = await fetch(statusUrl);
-      if (!statusRes.ok) continue;
-      const statusData = await statusRes.json();
-
-      if (statusData.downloadUrl || statusData.url || statusData.status === 'completed') {
-        const finalUrl = statusData.downloadUrl || statusData.url;
-        if (finalUrl) {
-          return {
-            title: cleanTitle(firstItem.title),
-            artist: firstItem.uploaderName || 'YouTube Artist',
-            src: finalUrl,
-            image: firstItem.thumbnailUrl || ''
-          };
-        }
-      }
-      if (statusData.status === 'failed') break;
-    }
-    return null;
-  } catch (e) {
-    console.warn('Convert1s engine error:', e);
-    return null;
-  }
-}
-
-// Engine 2: KyioV2
+// Engine 1: KyioV2 Primary (Ultra Fast & Direct)
 async function fetchFromKyioV2(query: string): Promise<TrackResult | null> {
   try {
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 5000);
-    const res = await fetch(`https://api.kyio.web.id/api/v2/dl/yt-play?apikey=kyio&q=${encodeURIComponent(query)}`, {
+    const timeout = setTimeout(() => controller.abort(), 6000);
+    const res = await fetch(`https://api.kyio.web.id/api/v2/dl/yt-play?q=${encodeURIComponent(query)}&apikey=${APIKEY}`, {
       signal: controller.signal
     });
     clearTimeout(timeout);
     if (!res.ok) return null;
     const data = await res.json();
 
-    if (data.status && data.result && (data.result.download_url || data.result.dl_url)) {
+    const resultObj = data.result || data.data;
+    const song = resultObj?.song;
+    const download = resultObj?.download;
+    let rawUrl = download?.downloadURL || download?.url || resultObj?.download_url || resultObj?.dl_url;
+
+    if (rawUrl) {
+      if (rawUrl.startsWith('/')) {
+        rawUrl = `https://api.kyio.web.id${rawUrl}`;
+      }
       return {
-        title: cleanTitle(data.result.title || query),
-        artist: data.result.artist || data.result.channel || 'YouTube Artist',
-        src: data.result.download_url || data.result.dl_url,
-        image: data.result.thumbnail || ''
+        title: cleanTitle(song?.title || resultObj?.title || query),
+        artist: song?.artist?.name || resultObj?.artist || resultObj?.channel || 'YouTube Artist',
+        src: rawUrl,
+        image: song?.thumbnail || resultObj?.thumbnail || ''
       };
     }
     return null;
@@ -92,11 +49,46 @@ async function fetchFromKyioV2(query: string): Promise<TrackResult | null> {
   }
 }
 
-// Engine 3: NexRay
+// Engine 2: KyioV1 Fallback
+async function fetchFromKyioV1(query: string): Promise<TrackResult | null> {
+  try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 6000);
+    const res = await fetch(`https://api.kyio.web.id/api/dl/yt-play?q=${encodeURIComponent(query)}&apikey=${APIKEY}`, {
+      signal: controller.signal
+    });
+    clearTimeout(timeout);
+    if (!res.ok) return null;
+    const data = await res.json();
+
+    const resultObj = data.result || data.data;
+    const song = resultObj?.song;
+    const download = resultObj?.download;
+    let rawUrl = download?.downloadURL || download?.url || resultObj?.download_url;
+
+    if (rawUrl) {
+      if (rawUrl.startsWith('/')) {
+        rawUrl = `https://api.kyio.web.id${rawUrl}`;
+      }
+      return {
+        title: cleanTitle(song?.title || resultObj?.title || query),
+        artist: song?.artist?.name || resultObj?.artist || 'YouTube Artist',
+        src: rawUrl,
+        image: song?.thumbnail || resultObj?.thumbnail || ''
+      };
+    }
+    return null;
+  } catch (e) {
+    console.warn('KyioV1 engine error:', e);
+    return null;
+  }
+}
+
+// Engine 3: NexRay Fallback
 async function fetchFromNexRay(query: string): Promise<TrackResult | null> {
   try {
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 5000);
+    const timeout = setTimeout(() => controller.abort(), 6000);
     const res = await fetch(`https://api.nexray.eu.cc/downloader/ytplay?q=${encodeURIComponent(query)}`, {
       signal: controller.signal
     });
@@ -120,17 +112,17 @@ async function fetchFromNexRay(query: string): Promise<TrackResult | null> {
 }
 
 export async function searchMusicTrack(query: string): Promise<TrackResult> {
-  // Try Engine 1: Convert1s
-  const res1 = await fetchFromConvert1s(query);
+  // 1. Try KyioV2 Primary (with KYIO-APIKEY)
+  const res1 = await fetchFromKyioV2(query);
   if (res1 && res1.src) return res1;
 
-  // Try Engine 2: KyioV2
-  const res2 = await fetchFromKyioV2(query);
+  // 2. Try KyioV1 Fallback
+  const res2 = await fetchFromKyioV1(query);
   if (res2 && res2.src) return res2;
 
-  // Try Engine 3: NexRay
+  // 3. Try NexRay Fallback
   const res3 = await fetchFromNexRay(query);
   if (res3 && res3.src) return res3;
 
-  throw new Error('Gagal mendapatkan lagu dari seluruh server audio.');
+  throw new Error('Gagal memutar lagu. Server audio tidak merespon.');
 }

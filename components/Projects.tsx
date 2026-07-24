@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 
 const codeSnippets = {
-  curl: `curl -X GET "https://api.kyio.web.id/api/v2/ai/deepseek-v4?q=Hello&apikey=YOUR_KEY"`,
-  js: `const res = await fetch("https://api.kyio.web.id/api/v2/ai/deepseek-v4?q=Hello&apikey=YOUR_KEY");\nconst data = await res.json();\nconsole.log(data);`,
-  python: `import requests\n\nresponse = requests.get(\n    "https://api.kyio.web.id/api/v2/ai/deepseek-v4",\n    params={"q": "Hello", "apikey": "YOUR_KEY"}\n)\nprint(response.json())`
+  curl: `curl -X GET "https://api.kyio.web.id/api/v2/ai/deepseek-v4?q=Hello&apikey=KYIO-APIKEY"`,
+  js: `const res = await fetch("https://api.kyio.web.id/api/v2/ai/deepseek-v4?q=Hello&apikey=KYIO-APIKEY");\nconst data = await res.json();\nconsole.log(data);`,
+  python: `import requests\n\nresponse = requests.get(\n    "https://api.kyio.web.id/api/v2/ai/deepseek-v4",\n    params={"q": "Hello", "apikey": "KYIO-APIKEY"}\n)\nprint(response.json())`
 };
 
 const Projects: React.FC = () => {
