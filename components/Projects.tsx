@@ -55,9 +55,6 @@ const Projects: React.FC = () => {
                 <span className="px-3 py-1 rounded-full bg-accent/10 border border-accent/30 text-accent text-[10px] font-mono uppercase tracking-widest font-bold">
                   FLAGSHIP API
                 </span>
-                <span className="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-white/60 text-[10px] font-mono uppercase tracking-widest">
-                  v2 & v3 READY
-                </span>
               </div>
 
               <div>
