@@ -18,14 +18,14 @@ const Projects: React.FC = () => {
   };
 
   return (
-    <section id="projects" className="py-28 md:py-40 bg-[#050505] relative border-t border-white/5 overflow-hidden">
-      <div className="container mx-auto px-6 lg:px-20">
+    <section id="projects" className="py-20 sm:py-28 md:py-40 bg-[#050505] relative border-t border-white/5 overflow-hidden">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-20">
         
         {/* Section Heading */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16 md:mb-24">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 sm:gap-8 mb-12 sm:mb-16 md:mb-24">
           <div>
             <span className="text-accent font-mono text-xs uppercase tracking-[0.3em] block mb-3">Portfolio Highlights</span>
-            <h2 className="font-jakarta text-5xl md:text-7xl lg:text-[8rem] font-black uppercase tracking-tighter leading-none text-white">
+            <h2 className="font-jakarta text-4xl sm:text-6xl md:text-7xl lg:text-[8rem] font-black uppercase tracking-tighter leading-none text-white">
               FLAGSHIP <br /> <span className="text-accent">PROJECT</span>
             </h2>
           </div>

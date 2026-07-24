@@ -128,7 +128,7 @@ const MusicPlayer: React.FC = () => {
   };
 
   return (
-    <div className="fixed bottom-6 left-6 z-50 flex flex-col items-start gap-4">
+    <div className="fixed bottom-4 left-4 sm:bottom-6 sm:left-6 z-50 flex flex-col items-start gap-4">
       <AnimatePresence>
         {showSearch && (
             <motion.div 
@@ -136,7 +136,7 @@ const MusicPlayer: React.FC = () => {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: 12, scale: 0.96 }}
                 transition={{ duration: 0.2, ease: "easeOut" }}
-                className="bg-[#121212]/95 backdrop-blur-md border border-white/10 p-3.5 rounded-xl w-80 shadow-2xl flex flex-col gap-3"
+                className="bg-[#121212]/95 backdrop-blur-md border border-white/10 p-3 sm:p-3.5 rounded-xl w-[calc(100vw-2rem)] sm:w-80 max-w-xs shadow-2xl flex flex-col gap-3"
             >
                 <div className="flex items-center justify-between">
                     <span className="text-[10px] font-mono tracking-widest text-white/40 uppercase">Search Audio</span>
