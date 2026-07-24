@@ -21,19 +21,35 @@ const App: React.FC = () => {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    // Simulasi loading progress dari 0 sampai 100
-    const interval = setInterval(() => {
-      setProgress((prev) => {
-        if (prev >= 100) {
-          clearInterval(interval);
-          setTimeout(() => setIsSiteLoading(false), 400); // delay sebentar setelah 100%
-          return 100;
-        }
-        return prev + Math.floor(Math.random() * 15) + 5; // Naik acak
-      });
-    }, 150);
+    let currentProgress = 0;
+    let isLoaded = false;
 
-    return () => clearInterval(interval);
+    const handleLoad = () => {
+      isLoaded = true;
+    };
+
+    if (document.readyState === 'complete') {
+      isLoaded = true;
+    } else {
+      window.addEventListener('load', handleLoad);
+    }
+
+    const timer = setInterval(() => {
+      currentProgress += isLoaded ? 10 : 3;
+      if (currentProgress >= 100) {
+        currentProgress = 100;
+        setProgress(100);
+        clearInterval(timer);
+        setTimeout(() => setIsSiteLoading(false), 300);
+      } else {
+        setProgress(currentProgress);
+      }
+    }, 35);
+
+    return () => {
+      clearInterval(timer);
+      window.removeEventListener('load', handleLoad);
+    };
   }, []);
 
   useEffect(() => {
