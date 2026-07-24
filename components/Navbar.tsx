@@ -28,7 +28,7 @@ const Navbar: React.FC = () => {
           animate={{ opacity: 1, x: 0 }}
           className="flex items-center gap-6 md:gap-10"
         >
-          {['About', 'Stack', 'Contact'].map(item => (
+          {['About', 'Projects', 'Stack', 'Contact'].map(item => (
             <a 
               key={item} 
               href={`#${item.toLowerCase()}`} 
