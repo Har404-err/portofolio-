@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { searchMusicTrack } from '../services/musicApi';
 
 // Tipe data untuk Track
 interface Track {
@@ -112,27 +113,17 @@ const MusicPlayer: React.FC = () => {
     setLoading(true);
 
     try {
-        const res = await fetch(`https://api.kyio.web.id/api/dl/yt-play?q=${encodeURIComponent(query)}`);
-        const data = await res.json();
-        
-        if (data.status === "success" && data.download && data.download.downloadURL) {
-            setTrack({
-                title: (data.song?.name || data.download.title).replace(/\(Official Video\)|Lyrics|Official Audio/gi, '').substring(0, 30),
-                artist: data.song?.artist?.name || "Unknown",
-                src: data.download.downloadURL, 
-                image: data.song?.thumbnails?.[data.song.thumbnails.length - 1]?.url || data.song?.thumbnails?.[0]?.url || ""
-            });
-            setIsPlaying(true);
-            setShowSearch(false);
-            setQuery('');
-        } else {
-            alert("Lagu tidak ditemukan!");
-        }
-    } catch (err) {
-        console.error("Search Error", err);
-        alert("Gagal koneksi API.");
+      // ponytail: Fallback multi-engine (Convert1s -> KyioV2 -> NexRay). Upgrade path: Add websocket/server proxy for faster stream.
+      const newTrack = await searchMusicTrack(query);
+      setTrack(newTrack);
+      setIsPlaying(true);
+      setShowSearch(false);
+      setQuery('');
+    } catch (err: any) {
+      console.error("Search Error", err);
+      alert(err.message || "Gagal memutar lagu dari server.");
     } finally {
-        setLoading(false);
+      setLoading(false);
     }
   };
 
