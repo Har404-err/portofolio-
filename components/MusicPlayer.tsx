@@ -59,12 +59,11 @@ const MusicPlayer: React.FC = () => {
     audio.volume = 0.5;
     audioRef.current = audio;
 
-    const handleCanPlay = () => {
+    const handleReady = () => {
         setAudioLoading(false);
         if (isPlaying) {
             audio.play().catch(e => {
-                console.warn("Autoplay blocked:", e);
-                setIsPlaying(false);
+                console.warn("Autoplay blocked or stream error:", e);
             });
         }
     };
@@ -74,16 +73,25 @@ const MusicPlayer: React.FC = () => {
         console.error("Audio Error:", e);
         setAudioLoading(false);
         setIsPlaying(false);
-        alert("Gagal memutar audio. Link mungkin expired.");
+        alert("Gagal memutar audio dari server.");
     };
 
-    audio.addEventListener('canplay', handleCanPlay);
+    audio.addEventListener('canplay', handleReady);
+    audio.addEventListener('canplaythrough', handleReady);
+    audio.addEventListener('loadeddata', handleReady);
     audio.addEventListener('loadstart', handleLoadStart);
     audio.addEventListener('error', handleError);
 
+    // Attempt playback immediately if already buffered
+    if (audio.readyState >= 2) {
+      handleReady();
+    }
+
     return () => {
         audio.pause();
-        audio.removeEventListener('canplay', handleCanPlay);
+        audio.removeEventListener('canplay', handleReady);
+        audio.removeEventListener('canplaythrough', handleReady);
+        audio.removeEventListener('loadeddata', handleReady);
         audio.removeEventListener('loadstart', handleLoadStart);
         audio.removeEventListener('error', handleError);
     };
