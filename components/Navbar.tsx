@@ -32,6 +32,14 @@ const Navbar: React.FC = () => {
             <a 
               key={item} 
               href={`#${item.toLowerCase()}`} 
+              onClick={(e) => {
+                e.preventDefault();
+                const el = document.getElementById(item.toLowerCase());
+                if (el) {
+                  const y = el.getBoundingClientRect().top + window.scrollY - 80;
+                  window.scrollTo({ top: y, behavior: 'smooth' });
+                }
+              }}
               className="text-[9px] sm:text-[10px] md:text-[12px] uppercase tracking-[0.15em] sm:tracking-[0.2em] font-medium text-white/60 hover:text-[#2563EB] hover:drop-shadow-[0_0_8px_rgba(37,99,235,0.8)] transition-all interactive px-1.5 sm:px-2 py-1"
             >
               {item}
