@@ -123,32 +123,7 @@ const App: React.FC = () => {
             transition={{ duration: 0.8, ease: "easeInOut" }}
             className="fixed inset-0 z-[999] bg-[#050505] flex items-center justify-center font-space overflow-hidden"
           >
-            <div className="flex flex-col items-center gap-6">
-                {/* Loader huruf M */}
-                <MLoader progress={progress} />
-
-                {/* Teks + progress */}
-                <div className="flex flex-col items-center gap-2">
-                    <motion.div
-                        animate={{ opacity: [0.5, 1, 0.5] }}
-                        transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-                        className="text-accent text-sm tracking-[0.3em] font-bold uppercase"
-                    >
-                        INITIALIZING
-                    </motion.div>
-                    <div className="text-[10px] text-white/50 tracking-[0.2em]">
-                        [{progress}%]
-                    </div>
-                    {/* Progress bar neon */}
-                    <div className="mt-3 w-40 h-[2px] bg-white/10 overflow-hidden rounded-full">
-                        <motion.div
-                            className="h-full bg-accent"
-                            style={{ width: `${progress}%` }}
-                            transition={{ ease: "easeOut" }}
-                        />
-                    </div>
-                </div>
-            </div>
+            <MLoader progress={progress} />
           </motion.div>
         )}
       </AnimatePresence>
