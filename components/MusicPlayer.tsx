@@ -15,7 +15,6 @@ const DEFAULT_TRACK: Track = {
 };
 
 const STORAGE_KEY = 'musicPlayerTrack';
-const VOLUME_KEY = 'musicPlayerVolume';
 const PLAYER_PANEL_ID = 'music-player-panel';
 const SEARCH_PANEL_ID = 'music-search-panel';
 const SEARCH_INPUT_ID = 'music-search-input';
@@ -51,14 +50,13 @@ const formatTime = (seconds: number): string => {
   return `${minutes}:${Math.floor(seconds % 60).toString().padStart(2, '0')}`;
 };
 
-function Icon({ name, size = 16 }: { name: 'play' | 'pause' | 'search' | 'close' | 'prev' | 'volume'; size?: number }) {
+function Icon({ name, size = 16 }: { name: 'play' | 'pause' | 'search' | 'close' | 'prev'; size?: number }) {
   const common = { width: size, height: size, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const };
   if (name === 'play') return <svg {...common} fill="currentColor" stroke="none"><path d="M7 4.5v15l12-7.5-12-7.5Z" /></svg>;
   if (name === 'pause') return <svg {...common} fill="currentColor" stroke="none"><path d="M6 4h4v16H6zM14 4h4v16h-4z" /></svg>;
   if (name === 'search') return <svg {...common}><circle cx="11" cy="11" r="7" /><path d="m20 20-4-4" /></svg>;
   if (name === 'close') return <svg {...common}><path d="m6 6 12 12M18 6 6 18" /></svg>;
-  if (name === 'prev') return <svg {...common} fill="currentColor" stroke="none"><path d="m19 4.5-10 7.5 10 7.5v-15ZM5 4h2v16H5z" /></svg>;
-  return <svg {...common}><path d="M11 5 6 9H3v6h3l5 4V5ZM19 9a5 5 0 0 1 0 6M16.5 11.5a2 2 0 0 1 0 1" /></svg>;
+  return <svg {...common} fill="currentColor" stroke="none"><path d="m19 4.5-10 7.5 10 7.5v-15ZM5 4h2v16H5z" /></svg>;
 }
 
 const MusicPlayer: React.FC = () => {
@@ -70,7 +68,6 @@ const MusicPlayer: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [duration, setDuration] = useState(0);
-  const [volume, setVolume] = useState(0.5);
   const [error, setError] = useState('');
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -135,9 +132,7 @@ const MusicPlayer: React.FC = () => {
   useEffect(() => {
     const audio = new Audio();
     audio.preload = 'auto';
-    audio.volume = readStorage<number>(VOLUME_KEY, 0.5);
     audioRef.current = audio;
-    setVolume(audio.volume);
 
     const onPlaying = () => { setIsPlaying(true); setLoading(false); };
     const onPause = () => setIsPlaying(false);
@@ -168,7 +163,6 @@ const MusicPlayer: React.FC = () => {
     audio.addEventListener('ended', onEnded);
 
     const savedTrack = readStorage<unknown>(STORAGE_KEY, null);
-    const savedVolume = readStorage<number>(VOLUME_KEY, 0.5);
     const initialTrack = isTrack(savedTrack) && savedTrack.title !== 'Black Beatles'
       ? savedTrack
       : DEFAULT_TRACK;
@@ -176,8 +170,6 @@ const MusicPlayer: React.FC = () => {
       currentTrackRef.current = initialTrack;
       setTrack(initialTrack);
       audio.src = initialTrack.src;
-      audio.volume = Math.max(0, Math.min(1, savedVolume));
-      setVolume(audio.volume);
     } else {
       setTrack(DEFAULT_TRACK);
       currentTrackRef.current = DEFAULT_TRACK;
@@ -200,11 +192,10 @@ const MusicPlayer: React.FC = () => {
   useEffect(() => {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(track));
-      localStorage.setItem(VOLUME_KEY, String(volume));
     } catch {
       // Private browsing atau storage penuh tidak boleh merusak playback.
     }
-  }, [track, volume]);
+  }, [track]);
 
   useEffect(() => {
     if (showSearch) window.setTimeout(() => searchInputRef.current?.focus(), 80);
@@ -283,11 +274,6 @@ const MusicPlayer: React.FC = () => {
     setProgress(audio.currentTime);
   };
 
-  const changeVolume = (nextVolume: number) => {
-    setVolume(nextVolume);
-    if (audioRef.current) audioRef.current.volume = nextVolume;
-  };
-
   const restart = useCallback(() => {
     if (!audioRef.current) return;
     audioRef.current.currentTime = 0;
@@ -363,8 +349,6 @@ const MusicPlayer: React.FC = () => {
               <button type="button" onClick={() => void togglePlay()} aria-label={isPlaying ? 'Pause lagu' : 'Putar lagu'} disabled={loading} className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-black shadow-lg transition hover:bg-accent disabled:opacity-50">{loading ? <span className="h-4 w-4 animate-spin rounded-full border-2 border-black/30 border-t-black" /> : <Icon name={isPlaying ? 'pause' : 'play'} size={16} />}</button>
               <button type="button" onClick={() => setShowSearch((value) => !value)} aria-label="Cari lagu" aria-expanded={showSearch} {...(showSearch ? { 'aria-controls': SEARCH_PANEL_ID } : {})} className={`ml-1 rounded-full p-2 transition hover:bg-white/10 ${showSearch ? 'text-accent' : 'text-white/40'}`}><Icon name="search" size={14} /></button>
             </div>
-
-            <div className="mb-1 flex items-center gap-2 text-white/40"><Icon name="volume" size={13} /><input type="range" min="0" max="1" step="0.01" value={volume} onChange={(event) => changeVolume(Number(event.target.value))} aria-label="Volume" className="h-1 w-full accent-accent" /></div>
 
             <AnimatePresence>
               {showSearch && (

@@ -40,7 +40,8 @@ const Contact: React.FC = () => {
         <div className="flex flex-col">
           {[
             { label: 'Open Source', title: 'GITHUB', url: 'https://github.com/Har404-err', accent: '#d4ff00' },
-            { label: 'Chat Now', title: 'WHATSAPP', url: 'https://wa.me/6282148570591', accent: '#ffffff' }
+            { label: 'Chat Now', title: 'WHATSAPP', url: 'https://wa.me/6282148570591', accent: '#ffffff' },
+            { label: 'Join Telegram', title: 'TELEGRAM', url: 'https://t.me/Muh4r', accent: '#38bdf8' }
           ].map((link, idx) => (
             <motion.a 
               key={idx}

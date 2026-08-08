@@ -164,8 +164,9 @@ const App: React.FC = () => {
            <div className="flex flex-col gap-6 md:items-end">
               <span className="text-[10px] uppercase font-black tracking-widest text-accent">Connect</span>
               <div className="flex gap-6">
-                 <a href="https://github.com/Har404-err" target="_blank" className="font-bold text-white hover:text-accent transition-colors interactive uppercase">Github</a>
-                 <a href="https://wa.me/6282148570591" target="_blank" className="font-bold text-white hover:text-accent transition-colors interactive uppercase">Whatsapp</a>
+                 <a href="https://github.com/Har404-err" target="_blank" rel="noopener noreferrer" className="font-bold text-white hover:text-accent transition-colors interactive uppercase">Github</a>
+                 <a href="https://wa.me/6282148570591" target="_blank" rel="noopener noreferrer" className="font-bold text-white hover:text-accent transition-colors interactive uppercase">Whatsapp</a>
+                 <a href="https://t.me/Muh4r" target="_blank" rel="noopener noreferrer" className="font-bold text-white hover:text-accent transition-colors interactive uppercase">Telegram</a>
               </div>
            </div>
         </div>
