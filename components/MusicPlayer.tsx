@@ -4,22 +4,21 @@ import { searchMusicTrack, TrackResult } from '../services/musicApi';
 
 type Track = TrackResult & { query?: string };
 
+const DEFAULT_COVER = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"%3E%3Cdefs%3E%3ClinearGradient id="g" x1="0" y1="0" x2="1" y2="1"%3E%3Cstop stop-color="%2300f2fe"/%3E%3Cstop offset="1" stop-color="%234facfe"/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width="512" height="512" rx="96" fill="%2309090b"/%3E%3Cpath d="M112 366V146l144 124 144-124v220" fill="none" stroke="url(%23g)" stroke-width="34" stroke-linecap="round" stroke-linejoin="round"/%3E%3C/svg%3E';
+
 const DEFAULT_TRACK: Track = {
-  title: 'Black Beatles',
-  artist: 'Rae Sremmurd feat. Gucci Mane',
-  src: '/audio/black-beatles.mp3',
-  image: '/audio/black-beatles.jpg',
-  query: 'Black Beatles Rae Sremmurd',
+  title: 'Seventh Heaven',
+  artist: 'Unknown Artist',
+  src: '',
+  image: DEFAULT_COVER,
+  query: 'Seventh Heaven',
 };
 
 const STORAGE_KEY = 'musicPlayerTrack';
-const QUEUE_KEY = 'musicPlayerQueue';
 const VOLUME_KEY = 'musicPlayerVolume';
 const PLAYER_PANEL_ID = 'music-player-panel';
 const SEARCH_PANEL_ID = 'music-search-panel';
-const QUEUE_PANEL_ID = 'music-queue-panel';
 const SEARCH_INPUT_ID = 'music-search-input';
-const QUEUE_TITLE_ID = 'music-queue-title';
 
 const srOnlyClass = 'sr-only';
 
@@ -37,31 +36,36 @@ const readStorage = <T,>(key: string, fallback: T): T => {
   }
 };
 
+const isTrack = (value: unknown): value is Track => {
+  if (!value || typeof value !== 'object') return false;
+  const candidate = value as Partial<Track>;
+  return typeof candidate.title === 'string'
+    && typeof candidate.artist === 'string'
+    && typeof candidate.src === 'string'
+    && typeof candidate.image === 'string';
+};
+
 const formatTime = (seconds: number): string => {
   if (!Number.isFinite(seconds) || seconds < 0) return '0:00';
   const minutes = Math.floor(seconds / 60);
   return `${minutes}:${Math.floor(seconds % 60).toString().padStart(2, '0')}`;
 };
 
-function Icon({ name, size = 16 }: { name: 'play' | 'pause' | 'search' | 'close' | 'next' | 'prev' | 'list' | 'volume'; size?: number }) {
+function Icon({ name, size = 16 }: { name: 'play' | 'pause' | 'search' | 'close' | 'prev' | 'volume'; size?: number }) {
   const common = { width: size, height: size, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const };
   if (name === 'play') return <svg {...common} fill="currentColor" stroke="none"><path d="M7 4.5v15l12-7.5-12-7.5Z" /></svg>;
   if (name === 'pause') return <svg {...common} fill="currentColor" stroke="none"><path d="M6 4h4v16H6zM14 4h4v16h-4z" /></svg>;
   if (name === 'search') return <svg {...common}><circle cx="11" cy="11" r="7" /><path d="m20 20-4-4" /></svg>;
   if (name === 'close') return <svg {...common}><path d="m6 6 12 12M18 6 6 18" /></svg>;
-  if (name === 'next') return <svg {...common} fill="currentColor" stroke="none"><path d="M5 4.5v15l10-7.5-10-7.5ZM17 4h2v16h-2z" /></svg>;
   if (name === 'prev') return <svg {...common} fill="currentColor" stroke="none"><path d="m19 4.5-10 7.5 10 7.5v-15ZM5 4h2v16H5z" /></svg>;
-  if (name === 'list') return <svg {...common}><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" /></svg>;
   return <svg {...common}><path d="M11 5 6 9H3v6h3l5 4V5ZM19 9a5 5 0 0 1 0 6M16.5 11.5a2 2 0 0 1 0 1" /></svg>;
 }
 
 const MusicPlayer: React.FC = () => {
   const [track, setTrack] = useState<Track>(DEFAULT_TRACK);
-  const [queue, setQueue] = useState<Track[]>([]);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
-  const [showQueue, setShowQueue] = useState(false);
   const [query, setQuery] = useState('');
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -72,15 +76,13 @@ const MusicPlayer: React.FC = () => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const currentTrackRef = useRef(track);
-  const queueRef = useRef(queue);
   const recoveryRef = useRef(false);
   const recoveryTrackRef = useRef('');
   const autoplayRequestedRef = useRef(false);
 
   useEffect(() => { currentTrackRef.current = track; }, [track]);
-  useEffect(() => { queueRef.current = queue; }, [queue]);
 
-  const playTrack = useCallback(async (nextTrack: Track, autoplay = true) => {
+  const playTrack = useCallback(async (nextTrack: Track) => {
     const audio = audioRef.current;
     if (!audio || !nextTrack.src) return;
 
@@ -90,11 +92,6 @@ const MusicPlayer: React.FC = () => {
     setLoading(true);
     audio.src = nextTrack.src;
     audio.load();
-
-    if (!autoplay) {
-      setLoading(false);
-      return;
-    }
 
     try {
       await audio.play();
@@ -124,7 +121,7 @@ const MusicPlayer: React.FC = () => {
     setLoading(true);
     try {
       const freshTrack = await searchMusicTrack(recoveryQuery);
-      await playTrack(freshTrack, true);
+      await playTrack(freshTrack);
     } catch {
       setLoading(false);
       setIsPlaying(false);
@@ -154,26 +151,10 @@ const MusicPlayer: React.FC = () => {
       void recoverCurrentTrack();
     };
     const onEnded = () => {
-      const [next, ...rest] = queueRef.current;
-      if (next) {
-        setQueue(rest);
-        if (next.src) {
-          void playTrack(next, true);
-        } else {
-          setLoading(true);
-          void searchMusicTrack(next.query || `${next.title} ${next.artist}`)
-            .then((freshTrack) => playTrack(freshTrack, true))
-            .catch(() => {
-              setLoading(false);
-              setError('Gagal memuat lagu berikutnya.');
-            });
-        }
-      } else {
-        audio.currentTime = 0;
-        setProgress(0);
-        // Loop lagu bawaan/current track tanpa membuat elemen audio baru.
-        void audio.play().catch(() => setIsPlaying(false));
-      }
+      audio.currentTime = 0;
+      setProgress(0);
+      // Ulangi lagu aktif tanpa berpindah ke lagu berikutnya.
+      void audio.play().catch(() => setIsPlaying(false));
     };
 
     audio.addEventListener('playing', onPlaying);
@@ -186,22 +167,21 @@ const MusicPlayer: React.FC = () => {
     audio.addEventListener('error', onError);
     audio.addEventListener('ended', onEnded);
 
-    const savedTrack = readStorage<Track>(STORAGE_KEY, DEFAULT_TRACK);
-    const savedQueue = readStorage<Track[]>(QUEUE_KEY, []);
+    const savedTrack = readStorage<unknown>(STORAGE_KEY, null);
     const savedVolume = readStorage<number>(VOLUME_KEY, 0.5);
-    if (savedTrack?.src) {
-      currentTrackRef.current = savedTrack;
-      setTrack(savedTrack);
-      audio.src = savedTrack.src;
+    const initialTrack = isTrack(savedTrack) && savedTrack.title !== 'Black Beatles'
+      ? savedTrack
+      : DEFAULT_TRACK;
+    if (initialTrack?.src) {
+      currentTrackRef.current = initialTrack;
+      setTrack(initialTrack);
+      audio.src = initialTrack.src;
       audio.volume = Math.max(0, Math.min(1, savedVolume));
       setVolume(audio.volume);
+    } else {
+      setTrack(DEFAULT_TRACK);
+      currentTrackRef.current = DEFAULT_TRACK;
     }
-    if (Array.isArray(savedQueue)) {
-      setQueue(savedQueue
-        .filter((item) => item?.title && (item?.query || item?.src))
-        .map((item) => ({ ...item, src: '' })));
-    }
-
     return () => {
       audio.pause();
       audio.removeEventListener('playing', onPlaying);
@@ -220,12 +200,11 @@ const MusicPlayer: React.FC = () => {
   useEffect(() => {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(track));
-      localStorage.setItem(QUEUE_KEY, JSON.stringify(queue));
       localStorage.setItem(VOLUME_KEY, String(volume));
     } catch {
       // Private browsing atau storage penuh tidak boleh merusak playback.
     }
-  }, [track, queue, volume]);
+  }, [track, volume]);
 
   useEffect(() => {
     if (showSearch) window.setTimeout(() => searchInputRef.current?.focus(), 80);
@@ -263,7 +242,7 @@ const MusicPlayer: React.FC = () => {
     return () => events.forEach((event) => window.removeEventListener(event, retryAutoplay));
   }, [togglePlay]);
 
-  const handleSearch = async (event: React.FormEvent | React.MouseEvent, addToQueue = false) => {
+  const handleSearch = async (event: React.FormEvent) => {
     event.preventDefault();
     const normalizedQuery = query.trim();
     if (!normalizedQuery || loading) return;
@@ -272,13 +251,7 @@ const MusicPlayer: React.FC = () => {
     setError('');
     try {
       const result = await searchMusicTrack(normalizedQuery);
-      if (addToQueue) {
-        // Simpan metadata/query saja; URL resolver dapat kedaluwarsa sebelum diputar.
-        setQueue((previous) => [...previous, { ...result, src: '', query: normalizedQuery }]);
-        setLoading(false);
-      } else {
-        await playTrack(result, true);
-      }
+      await playTrack(result);
       setQuery('');
       setShowSearch(false);
     } catch (searchError) {
@@ -315,23 +288,6 @@ const MusicPlayer: React.FC = () => {
     if (audioRef.current) audioRef.current.volume = nextVolume;
   };
 
-  const skipNext = useCallback(() => {
-    const [next, ...rest] = queueRef.current;
-    if (!next) return;
-    setQueue(rest);
-    if (next.src) {
-      void playTrack(next, true);
-      return;
-    }
-    setLoading(true);
-    void searchMusicTrack(next.query || `${next.title} ${next.artist}`)
-      .then((freshTrack) => playTrack(freshTrack, true))
-      .catch(() => {
-        setLoading(false);
-        setError('Gagal memuat lagu berikutnya.');
-      });
-  }, [playTrack]);
-
   const restart = useCallback(() => {
     if (!audioRef.current) return;
     audioRef.current.currentTime = 0;
@@ -350,20 +306,14 @@ const MusicPlayer: React.FC = () => {
     navigator.mediaSession.setActionHandler('play', () => void togglePlay());
     navigator.mediaSession.setActionHandler('pause', () => void togglePlay());
     navigator.mediaSession.setActionHandler('previoustrack', restart);
-    navigator.mediaSession.setActionHandler('nexttrack', skipNext);
     return () => {
       navigator.mediaSession.setActionHandler('play', null);
       navigator.mediaSession.setActionHandler('pause', null);
       navigator.mediaSession.setActionHandler('previoustrack', null);
-      navigator.mediaSession.setActionHandler('nexttrack', null);
     };
-  }, [track, togglePlay, restart, skipNext]);
+  }, [track, togglePlay, restart]);
 
   const playbackStatus = getPlaybackStatus(loading, isPlaying, track);
-  const queueLabel = queue.length > 0
-    ? `Buka antrean lagu, ${queue.length} lagu dalam antrean`
-    : 'Buka antrean lagu, antrean kosong';
-
   return (
     <div className="fixed bottom-4 left-4 sm:bottom-6 sm:left-6 z-50 flex flex-col items-start gap-3">
       <p className={srOnlyClass} role="status" aria-live="polite" aria-atomic="true">{playbackStatus}</p>
@@ -388,7 +338,7 @@ const MusicPlayer: React.FC = () => {
 
             <div className="mb-4 flex items-center gap-3">
               <motion.img
-                src={track.image || '/audio/black-beatles.jpg'}
+                src={track.image || DEFAULT_COVER}
                 alt="Cover lagu"
                 animate={{ rotate: isPlaying ? 360 : 0 }}
                 transition={{ duration: 8, repeat: Infinity, ease: 'linear' }}
@@ -411,9 +361,7 @@ const MusicPlayer: React.FC = () => {
             <div className="mb-3 flex items-center justify-center gap-2">
               <button type="button" onClick={restart} aria-label="Mulai ulang lagu" className="rounded-full p-2 text-white/40 transition hover:bg-white/10 hover:text-white"><Icon name="prev" size={14} /></button>
               <button type="button" onClick={() => void togglePlay()} aria-label={isPlaying ? 'Pause lagu' : 'Putar lagu'} disabled={loading} className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-black shadow-lg transition hover:bg-accent disabled:opacity-50">{loading ? <span className="h-4 w-4 animate-spin rounded-full border-2 border-black/30 border-t-black" /> : <Icon name={isPlaying ? 'pause' : 'play'} size={16} />}</button>
-              <button type="button" onClick={skipNext} aria-label="Lagu berikutnya" disabled={!queue.length || loading} className="rounded-full p-2 text-white/40 transition hover:bg-white/10 hover:text-white disabled:opacity-20"><Icon name="next" size={14} /></button>
               <button type="button" onClick={() => setShowSearch((value) => !value)} aria-label="Cari lagu" aria-expanded={showSearch} {...(showSearch ? { 'aria-controls': SEARCH_PANEL_ID } : {})} className={`ml-1 rounded-full p-2 transition hover:bg-white/10 ${showSearch ? 'text-accent' : 'text-white/40'}`}><Icon name="search" size={14} /></button>
-              <button type="button" onClick={() => setShowQueue((value) => !value)} aria-label={queueLabel} aria-expanded={showQueue} {...(showQueue ? { 'aria-controls': QUEUE_PANEL_ID } : {})} className={`relative rounded-full p-2 transition hover:bg-white/10 ${showQueue ? 'text-accent' : 'text-white/40'}`}><Icon name="list" size={14} />{queue.length > 0 && <span aria-hidden="true" className="absolute -right-0.5 -top-0.5 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-accent text-[8px] font-bold text-black">{queue.length}</span>}</button>
             </div>
 
             <div className="mb-1 flex items-center gap-2 text-white/40"><Icon name="volume" size={13} /><input type="range" min="0" max="1" step="0.01" value={volume} onChange={(event) => changeVolume(Number(event.target.value))} aria-label="Volume" className="h-1 w-full accent-accent" /></div>
@@ -422,26 +370,17 @@ const MusicPlayer: React.FC = () => {
               {showSearch && (
                 <motion.form id={SEARCH_PANEL_ID} initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} onSubmit={(event) => void handleSearch(event)} aria-label="Form pencarian lagu" className="mt-3 overflow-hidden border-t border-white/[0.06] pt-3">
                   <div className="flex gap-2"><div className="flex min-w-0 flex-1 items-center gap-2 rounded-lg border border-white/10 bg-white/[0.04] px-2.5"><Icon name="search" size={13} /><label htmlFor={SEARCH_INPUT_ID} className={srOnlyClass}>Artis atau judul lagu</label><input id={SEARCH_INPUT_ID} ref={searchInputRef} value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Artis atau judul lagu..." className="min-w-0 flex-1 bg-transparent py-2 text-xs text-white outline-none placeholder:text-white/25" disabled={loading} /></div><button type="submit" disabled={!query.trim() || loading} className="rounded-lg bg-accent px-3 text-xs font-bold text-black transition hover:brightness-110 disabled:opacity-30">{loading ? 'Memuat…' : 'Play'}</button></div>
-                  <button type="button" onClick={(event) => { void handleSearch(event, true); }} disabled={!query.trim() || loading} className="mt-2 w-full rounded-lg border border-white/10 py-2 text-[10px] font-bold uppercase tracking-widest text-white/50 transition hover:bg-white/10 hover:text-white disabled:opacity-30">+ Tambah ke antrean</button>
                 </motion.form>
               )}
             </AnimatePresence>
 
-            <AnimatePresence>
-              {showQueue && (
-                <motion.div id={QUEUE_PANEL_ID} initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} aria-labelledby={QUEUE_TITLE_ID} className="mt-3 overflow-hidden border-t border-white/[0.06] pt-3">
-                  <div className="mb-2 flex items-center justify-between"><span id={QUEUE_TITLE_ID} className="text-[10px] font-bold uppercase tracking-widest text-white/40">Antrean</span>{queue.length > 0 && <button type="button" onClick={() => setQueue([])} className="text-[10px] text-white/30 hover:text-white">Hapus semua</button>}</div>
-                  {queue.length === 0 ? <p className="py-3 text-center text-[11px] text-white/25">Antrean masih kosong.</p> : <div className="max-h-36 space-y-1 overflow-y-auto">{queue.map((item, index) => <div key={`${item.query || item.title}-${index}`} className="flex items-center gap-2 rounded-lg px-2 py-1.5 hover:bg-white/5"><span className="w-4 text-center text-[10px] text-white/25">{index + 1}</span><img src={item.image || '/audio/black-beatles.jpg'} alt="" className="h-7 w-7 rounded object-cover" /><span className="min-w-0 flex-1 truncate text-[11px] text-white/70">{item.title}</span><button type="button" onClick={() => setQueue((items) => items.filter((_, itemIndex) => itemIndex !== index))} aria-label={`Hapus ${item.title}`} className="text-white/25 hover:text-white"><Icon name="close" size={12} /></button></div>)}</div>}
-                </motion.div>
-              )}
-            </AnimatePresence>
             {error && <p role="alert" aria-live="assertive" className="mt-3 border-t border-red-400/10 pt-2 text-[10px] leading-relaxed text-red-300/80">{error}</p>}
           </motion.div>
         )}
       </AnimatePresence>
 
       <motion.div layout className="flex items-center overflow-hidden rounded-full border border-white/10 bg-[#0a0a0a]/85 pr-1.5 shadow-2xl backdrop-blur-xl" style={{ boxShadow: isPlaying ? '0 0 24px rgba(0, 242, 254, 0.25)' : undefined }}>
-        <button type="button" onClick={() => void togglePlay()} aria-label={isPlaying ? 'Pause lagu' : 'Putar lagu'} aria-busy={loading} className="group relative flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full"><img src={track.image || '/audio/black-beatles.jpg'} alt="Cover lagu" className={`absolute inset-0 h-full w-full object-cover opacity-70 transition group-hover:opacity-40 ${!isPlaying ? 'grayscale' : ''}`} /><span className="relative z-10 text-accent">{loading ? <><span aria-hidden="true" className="block h-5 w-5 animate-spin rounded-full border-2 border-accent/30 border-t-accent" /><span className={srOnlyClass}>Memuat audio</span></> : <Icon name={isPlaying ? 'pause' : 'play'} size={16} />}</span></button>
+        <button type="button" onClick={() => void togglePlay()} aria-label={isPlaying ? 'Pause lagu' : 'Putar lagu'} aria-busy={loading} className="group relative flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full"><img src={track.image || DEFAULT_COVER} alt={`Cover ${track.title}`} className={`absolute inset-0 h-full w-full object-cover opacity-70 transition group-hover:opacity-40 ${!isPlaying ? 'grayscale' : ''}`} /><span className="relative z-10 text-accent">{loading ? <><span aria-hidden="true" className="block h-5 w-5 animate-spin rounded-full border-2 border-accent/30 border-t-accent" /><span className={srOnlyClass}>Memuat audio</span></> : <Icon name={isPlaying ? 'pause' : 'play'} size={16} />}</span></button>
         <button type="button" onClick={() => setIsExpanded((value) => !value)} aria-label="Buka detail music player" aria-expanded={isExpanded} {...(isExpanded ? { 'aria-controls': PLAYER_PANEL_ID } : {})} className="min-w-0 flex-1 px-3 text-left"><span className="block max-w-32 truncate text-[10px] font-black uppercase tracking-wider text-accent">{track.title}</span><span className="block max-w-32 truncate font-mono text-[9px] text-white/50">{track.artist}</span></button>
         <button type="button" onClick={() => { setShowSearch((value) => !value); setIsExpanded(true); }} aria-label="Cari lagu" aria-expanded={showSearch} {...(showSearch ? { 'aria-controls': SEARCH_PANEL_ID } : {})} className={`rounded-full p-2 transition hover:bg-white/10 ${showSearch ? 'text-accent' : 'text-white/50'}`}><Icon name="search" size={15} /></button>
       </motion.div>
