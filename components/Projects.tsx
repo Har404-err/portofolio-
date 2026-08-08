@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 
 const codeSnippets = {
-  curl: `curl -sL "https://api.kyio.web.id/api/v2/ai/deepseek-v4?q=Hello"`,
-  js: `const res = await fetch("https://api.kyio.web.id/api/v2/ai/deepseek-v4?q=Hello");\nconst data = await res.json();\nconsole.log(data);`,
-  python: `import requests\n\nresponse = requests.get(\n    "https://api.kyio.web.id/api/v2/ai/deepseek-v4",\n    params={"q": "Hello"}\n)\nprint(response.json())`,
+  curl: `curl -sL "https://api.kyio.web.id/api/v2/ai/gpt-5-6-terra?q=Hello"`,
+  js: `const res = await fetch("https://api.kyio.web.id/api/v2/ai/gpt-5-6-terra?q=Hello");\nconst data = await res.json();\nconsole.log(data);`,
+  python: `import requests\n\nresponse = requests.get(\n    "https://api.kyio.web.id/api/v2/ai/gpt-5-6-terra",\n    params={"q": "Hello"}\n)\nprint(response.json())`,
 } as const;
 
 type CodeLanguage = keyof typeof codeSnippets;
