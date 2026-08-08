@@ -8,14 +8,24 @@
     <title>MUH4RHQ | API Engineer & Bot Dev</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;600;800&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;600;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --neon: #2563EB;
+            --color-bg: #050505;
+            --color-surface: #0a0a0d;
+            --color-primary: #18181B;
+            --color-secondary: #3F3F46;
+            --color-text: #FAFAFA;
+            --color-accent-solid: #2563EB;
+            --color-accent-start: #00f2fe;
+            --color-accent-end: #4facfe;
+            --color-accent-violet: #8b5cf6;
+            --color-accent-glow: rgba(0, 242, 254, 0.4);
+            --neon: var(--color-accent-solid);
             --neon-glow: rgba(37, 99, 235, 0.5);
-            --bg: #18181B;
-            --text: #FAFAFA;
-            --secondary: #3F3F46;
+            --bg: var(--color-primary);
+            --text: var(--color-text);
+            --secondary: var(--color-secondary);
         }
         body {
             font-family: 'Archivo', sans-serif;
@@ -25,6 +35,8 @@
             cursor: none;
             -webkit-font-smoothing: antialiased;
         }
+        .font-jakarta { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .font-archivo { font-family: 'Archivo', sans-serif; }
         .font-space { font-family: 'Space Grotesk', sans-serif; }
         
         .noise {
@@ -39,8 +51,8 @@
         .grid-bg {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background-image: linear-gradient(to right, rgba(37, 99, 235, 0.05) 1px, transparent 1px),
-                              linear-gradient(to bottom, rgba(37, 99, 235, 0.05) 1px, transparent 1px);
+            background-image: linear-gradient(to right, color-mix(in srgb, var(--color-accent-solid) 5%, transparent) 1px, transparent 1px),
+                              linear-gradient(to bottom, color-mix(in srgb, var(--color-accent-solid) 5%, transparent) 1px, transparent 1px);
             background-size: 80px 80px;
             z-index: -1;
             pointer-events: none;
@@ -62,7 +74,7 @@
         #cursor-follower {
             width: 44px;
             height: 44px;
-            border: 1px solid rgba(37, 99, 235, 0.2);
+            border: 1px solid color-mix(in srgb, var(--color-accent-solid) 20%, transparent);
             border-radius: 4px;
             position: fixed;
             pointer-events: none;
@@ -97,7 +109,7 @@
         .scanline {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 4px;
-            background: linear-gradient(to bottom, transparent, rgba(37, 99, 235, 0.05), transparent);
+            background: linear-gradient(to bottom, transparent, color-mix(in srgb, var(--color-accent-solid) 5%, transparent), transparent);
             z-index: 9998;
             pointer-events: none;
             animation: scan 10s linear infinite;
@@ -136,36 +148,36 @@
     
         /* Campuran / Mixed Gradient */
         .text-accent {
-            background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+            background: linear-gradient(135deg, var(--color-accent-start) 0%, var(--color-accent-end) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             color: transparent;
         }
         .bg-accent {
-            background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%) !important;
-            color: white !important;
+            background: linear-gradient(135deg, var(--color-accent-start) 0%, var(--color-accent-end) 100%) !important;
+            color: #050505 !important;
         }
         .border-accent {
-            border-color: #00f2fe !important;
+            border-color: var(--color-accent-start) !important;
         }
         .accent-glow {
-            box-shadow: 0 0 20px rgba(0, 242, 254, 0.4) !important;
+            box-shadow: 0 0 20px var(--color-accent-glow) !important;
         }
         .group:hover .group-hover\:text-accent {
-            background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+            background: linear-gradient(135deg, var(--color-accent-start) 0%, var(--color-accent-end) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             color: transparent;
         }
         .group:hover .group-hover\:bg-accent {
-            background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%) !important;
-            color: white !important;
+            background: linear-gradient(135deg, var(--color-accent-start) 0%, var(--color-accent-end) 100%) !important;
+            color: #050505 !important;
         }
         .group:hover .group-hover\:border-accent {
-            border-color: #00f2fe !important;
+            border-color: var(--color-accent-start) !important;
         }
         .hover\:text-accent:hover {
-            background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+            background: linear-gradient(135deg, var(--color-accent-start) 0%, var(--color-accent-end) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             color: transparent;
@@ -221,9 +233,9 @@
           extend: {
             colors: {
               accent: {
-                DEFAULT: '#8b5cf6', // Violet
-                hover: '#a78bfa',
-                glow: 'rgba(139, 92, 246, 0.5)'
+                DEFAULT: '#00f2fe',
+                hover: '#4facfe',
+                glow: 'rgba(0, 242, 254, 0.4)'
               }
             }
           }

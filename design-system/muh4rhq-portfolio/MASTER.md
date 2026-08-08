@@ -18,24 +18,30 @@
 
 | Role | Hex | CSS Variable |
 |------|-----|--------------|
+| Background | `#050505` | `--color-bg` |
+| Surface | `#0A0A0D` | `--color-surface` |
 | Primary | `#18181B` | `--color-primary` |
 | Secondary | `#3F3F46` | `--color-secondary` |
-| CTA/Accent | `#2563EB` | `--color-cta` |
-| Background | `#FAFAFA` | `--color-background` |
-| Text | `#09090B` | `--color-text` |
+| CTA/Accent solid | `#2563EB` | `--color-accent-solid` |
+| Accent gradient start | `#00F2FE` | `--color-accent-start` |
+| Accent gradient end | `#4FACFE` | `--color-accent-end` |
+| Text | `#FAFAFA` | `--color-text` |
 
-**Color Notes:** Monochrome + blue accent
+**Color Notes:** Dark monochrome surfaces with a cyan-to-blue primary accent gradient and violet reserved for secondary glow details.
+
+**Accent policy:** Use `--color-accent-solid` for indicators and browser-facing accents, `--color-accent-start`/`--color-accent-end` for the neon gradient, and `--color-accent-violet` only for secondary glow effects. Do not introduce per-component accent hex values.
 
 ### Typography
 
-- **Heading Font:** Archivo
-- **Body Font:** Space Grotesk
-- **Mood:** minimal, portfolio, designer, creative, clean, artistic
-- **Google Fonts:** [Archivo + Space Grotesk](https://fonts.google.com/share?selection.family=Archivo:wght@300;400;500;600;700|Space+Grotesk:wght@300;400;500;600;700)
+- **Display Font:** Plus Jakarta Sans (`font-jakarta`)
+- **Body Font:** Archivo (`font-archivo` / body default)
+- **Utility Font:** Space Grotesk (`font-space`)
+- **Mood:** dark editorial, retro-futurist, neon, technical
+- **Google Fonts:** [Archivo + Plus Jakarta Sans + Space Grotesk](https://fonts.google.com/share?selection.family=Archivo:wght@300;400;500;600;700|Plus+Jakarta+Sans:wght@400;500;600;700;800|Space+Grotesk:wght@300;400;500;600;700)
 
 **CSS Import:**
 ```css
-@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
 ```
 
 ### Spacing Variables
@@ -68,8 +74,8 @@
 ```css
 /* Primary Button */
 .btn-primary {
-  background: #2563EB;
-  color: white;
+  background: linear-gradient(135deg, var(--color-accent-start), var(--color-accent-end));
+  color: var(--color-bg);
   padding: 12px 24px;
   border-radius: 8px;
   font-weight: 600;
@@ -85,8 +91,8 @@
 /* Secondary Button */
 .btn-secondary {
   background: transparent;
-  color: #18181B;
-  border: 2px solid #18181B;
+  color: var(--color-text);
+  border: 1px solid var(--color-secondary);
   padding: 12px 24px;
   border-radius: 8px;
   font-weight: 600;
@@ -99,7 +105,7 @@
 
 ```css
 .card {
-  background: #FAFAFA;
+  background: var(--color-surface);
   border-radius: 12px;
   padding: 24px;
   box-shadow: var(--shadow-md);
@@ -118,16 +124,17 @@
 ```css
 .input {
   padding: 12px 16px;
-  border: 1px solid #E2E8F0;
+  border: 1px solid var(--color-secondary);
   border-radius: 8px;
   font-size: 16px;
   transition: border-color 200ms ease;
 }
 
 .input:focus {
-  border-color: #18181B;
-  outline: none;
-  box-shadow: 0 0 0 3px #18181B20;
+  border-color: var(--color-accent-start);
+  outline: 2px solid var(--color-accent-start);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 3px var(--color-accent-glow);
 }
 ```
 
@@ -135,12 +142,12 @@
 
 ```css
 .modal-overlay {
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(4px);
 }
 
 .modal {
-  background: white;
+  background: var(--color-surface);
   border-radius: 16px;
   padding: 32px;
   box-shadow: var(--shadow-xl);
@@ -153,7 +160,7 @@
 
 ## Style Guidelines
 
-**Style:** Retro-Futurism
+**Style:** Retro-Futurism / Dark Editorial
 
 **Keywords:** Vintage sci-fi, 80s aesthetic, neon glow, geometric patterns, CRT scanlines, pixel art, cyberpunk, synthwave
 

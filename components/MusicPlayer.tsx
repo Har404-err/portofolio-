@@ -15,6 +15,18 @@ const DEFAULT_TRACK: Track = {
 const STORAGE_KEY = 'musicPlayerTrack';
 const QUEUE_KEY = 'musicPlayerQueue';
 const VOLUME_KEY = 'musicPlayerVolume';
+const PLAYER_PANEL_ID = 'music-player-panel';
+const SEARCH_PANEL_ID = 'music-search-panel';
+const QUEUE_PANEL_ID = 'music-queue-panel';
+const SEARCH_INPUT_ID = 'music-search-input';
+const QUEUE_TITLE_ID = 'music-queue-title';
+
+const srOnlyClass = 'sr-only';
+
+const getPlaybackStatus = (loading: boolean, isPlaying: boolean, track: Track): string => {
+  if (loading) return 'Memuat audio.';
+  return isPlaying ? `Memutar ${track.title} oleh ${track.artist}.` : `${track.title} dijeda.`;
+};
 
 const readStorage = <T,>(key: string, fallback: T): T => {
   try {
@@ -347,14 +359,23 @@ const MusicPlayer: React.FC = () => {
     };
   }, [track, togglePlay, restart, skipNext]);
 
+  const playbackStatus = getPlaybackStatus(loading, isPlaying, track);
+  const queueLabel = queue.length > 0
+    ? `Buka antrean lagu, ${queue.length} lagu dalam antrean`
+    : 'Buka antrean lagu, antrean kosong';
+
   return (
     <div className="fixed bottom-4 left-4 sm:bottom-6 sm:left-6 z-50 flex flex-col items-start gap-3">
+      <p className={srOnlyClass} role="status" aria-live="polite" aria-atomic="true">{playbackStatus}</p>
       <AnimatePresence>
         {isExpanded && (
           <motion.div
             initial={{ opacity: 0, y: 12, scale: 0.96 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 12, scale: 0.96 }}
+            id={PLAYER_PANEL_ID}
+            aria-label="Detail music player"
+            aria-busy={loading}
             className="w-[calc(100vw-2rem)] sm:w-80 max-w-xs overflow-hidden rounded-2xl border border-white/10 bg-[#09090b]/95 p-4 shadow-2xl backdrop-blur-xl"
           >
             <div className="mb-3 flex items-center justify-between">
@@ -362,7 +383,7 @@ const MusicPlayer: React.FC = () => {
                 <span className={`h-1.5 w-1.5 rounded-full ${isPlaying ? 'bg-accent shadow-[0_0_8px_currentColor]' : 'bg-white/20'}`} />
                 {isPlaying ? 'Now playing' : 'Paused'}
               </span>
-              <button type="button" onClick={() => setIsExpanded(false)} aria-label="Tutup music player" className="rounded-lg p-1 text-white/30 transition hover:bg-white/10 hover:text-white"><Icon name="close" size={14} /></button>
+              <button type="button" onClick={() => setIsExpanded(false)} aria-label="Tutup music player" aria-controls={PLAYER_PANEL_ID} className="rounded-lg p-1 text-white/30 transition hover:bg-white/10 hover:text-white"><Icon name="close" size={14} /></button>
             </div>
 
             <div className="mb-4 flex items-center gap-3">
@@ -379,7 +400,7 @@ const MusicPlayer: React.FC = () => {
               </div>
             </div>
 
-            <div className="mb-1 cursor-pointer" onClick={seek} onKeyDown={handleSeekKeyDown} role="slider" aria-label="Posisi lagu" aria-valuemin={0} aria-valuemax={duration} aria-valuenow={progress} tabIndex={0}>
+            <div className="mb-1 cursor-pointer" onClick={seek} onKeyDown={handleSeekKeyDown} role="slider" aria-label="Posisi lagu" aria-valuemin={0} aria-valuemax={duration} aria-valuenow={progress} aria-valuetext={`${formatTime(progress)} dari ${formatTime(duration)}`} aria-disabled={!duration} tabIndex={duration ? 0 : -1}>
               <div className="group relative h-1 rounded-full bg-white/10 transition hover:h-1.5">
                 <div className="absolute inset-y-0 left-0 rounded-full bg-accent" style={{ width: `${duration ? (progress / duration) * 100 : 0}%` }} />
                 <div className="absolute top-1/2 h-2.5 w-2.5 -translate-y-1/2 rounded-full bg-white opacity-0 shadow transition group-hover:opacity-100" style={{ left: `${duration ? (progress / duration) * 100 : 0}%` }} />
@@ -391,16 +412,16 @@ const MusicPlayer: React.FC = () => {
               <button type="button" onClick={restart} aria-label="Mulai ulang lagu" className="rounded-full p-2 text-white/40 transition hover:bg-white/10 hover:text-white"><Icon name="prev" size={14} /></button>
               <button type="button" onClick={() => void togglePlay()} aria-label={isPlaying ? 'Pause lagu' : 'Putar lagu'} disabled={loading} className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-black shadow-lg transition hover:bg-accent disabled:opacity-50">{loading ? <span className="h-4 w-4 animate-spin rounded-full border-2 border-black/30 border-t-black" /> : <Icon name={isPlaying ? 'pause' : 'play'} size={16} />}</button>
               <button type="button" onClick={skipNext} aria-label="Lagu berikutnya" disabled={!queue.length || loading} className="rounded-full p-2 text-white/40 transition hover:bg-white/10 hover:text-white disabled:opacity-20"><Icon name="next" size={14} /></button>
-              <button type="button" onClick={() => setShowSearch((value) => !value)} aria-label="Cari lagu" className={`ml-1 rounded-full p-2 transition hover:bg-white/10 ${showSearch ? 'text-accent' : 'text-white/40'}`}><Icon name="search" size={14} /></button>
-              <button type="button" onClick={() => setShowQueue((value) => !value)} aria-label="Buka antrean lagu" className={`relative rounded-full p-2 transition hover:bg-white/10 ${showQueue ? 'text-accent' : 'text-white/40'}`}><Icon name="list" size={14} />{queue.length > 0 && <span className="absolute -right-0.5 -top-0.5 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-accent text-[8px] font-bold text-black">{queue.length}</span>}</button>
+              <button type="button" onClick={() => setShowSearch((value) => !value)} aria-label="Cari lagu" aria-expanded={showSearch} {...(showSearch ? { 'aria-controls': SEARCH_PANEL_ID } : {})} className={`ml-1 rounded-full p-2 transition hover:bg-white/10 ${showSearch ? 'text-accent' : 'text-white/40'}`}><Icon name="search" size={14} /></button>
+              <button type="button" onClick={() => setShowQueue((value) => !value)} aria-label={queueLabel} aria-expanded={showQueue} {...(showQueue ? { 'aria-controls': QUEUE_PANEL_ID } : {})} className={`relative rounded-full p-2 transition hover:bg-white/10 ${showQueue ? 'text-accent' : 'text-white/40'}`}><Icon name="list" size={14} />{queue.length > 0 && <span aria-hidden="true" className="absolute -right-0.5 -top-0.5 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-accent text-[8px] font-bold text-black">{queue.length}</span>}</button>
             </div>
 
             <div className="mb-1 flex items-center gap-2 text-white/40"><Icon name="volume" size={13} /><input type="range" min="0" max="1" step="0.01" value={volume} onChange={(event) => changeVolume(Number(event.target.value))} aria-label="Volume" className="h-1 w-full accent-accent" /></div>
 
             <AnimatePresence>
               {showSearch && (
-                <motion.form initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} onSubmit={(event) => void handleSearch(event)} className="mt-3 overflow-hidden border-t border-white/[0.06] pt-3">
-                  <div className="flex gap-2"><div className="flex min-w-0 flex-1 items-center gap-2 rounded-lg border border-white/10 bg-white/[0.04] px-2.5"><Icon name="search" size={13} /><input ref={searchInputRef} value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Artis atau judul lagu..." className="min-w-0 flex-1 bg-transparent py-2 text-xs text-white outline-none placeholder:text-white/25" disabled={loading} /></div><button type="submit" disabled={!query.trim() || loading} className="rounded-lg bg-accent px-3 text-xs font-bold text-black transition hover:brightness-110 disabled:opacity-30">Play</button></div>
+                <motion.form id={SEARCH_PANEL_ID} initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} onSubmit={(event) => void handleSearch(event)} aria-label="Form pencarian lagu" className="mt-3 overflow-hidden border-t border-white/[0.06] pt-3">
+                  <div className="flex gap-2"><div className="flex min-w-0 flex-1 items-center gap-2 rounded-lg border border-white/10 bg-white/[0.04] px-2.5"><Icon name="search" size={13} /><label htmlFor={SEARCH_INPUT_ID} className={srOnlyClass}>Artis atau judul lagu</label><input id={SEARCH_INPUT_ID} ref={searchInputRef} value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Artis atau judul lagu..." className="min-w-0 flex-1 bg-transparent py-2 text-xs text-white outline-none placeholder:text-white/25" disabled={loading} /></div><button type="submit" disabled={!query.trim() || loading} className="rounded-lg bg-accent px-3 text-xs font-bold text-black transition hover:brightness-110 disabled:opacity-30">{loading ? 'Memuat…' : 'Play'}</button></div>
                   <button type="button" onClick={(event) => { void handleSearch(event, true); }} disabled={!query.trim() || loading} className="mt-2 w-full rounded-lg border border-white/10 py-2 text-[10px] font-bold uppercase tracking-widest text-white/50 transition hover:bg-white/10 hover:text-white disabled:opacity-30">+ Tambah ke antrean</button>
                 </motion.form>
               )}
@@ -408,21 +429,21 @@ const MusicPlayer: React.FC = () => {
 
             <AnimatePresence>
               {showQueue && (
-                <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="mt-3 overflow-hidden border-t border-white/[0.06] pt-3">
-                  <div className="mb-2 flex items-center justify-between"><span className="text-[10px] font-bold uppercase tracking-widest text-white/40">Antrean</span>{queue.length > 0 && <button type="button" onClick={() => setQueue([])} className="text-[10px] text-white/30 hover:text-white">Hapus semua</button>}</div>
+                <motion.div id={QUEUE_PANEL_ID} initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} aria-labelledby={QUEUE_TITLE_ID} className="mt-3 overflow-hidden border-t border-white/[0.06] pt-3">
+                  <div className="mb-2 flex items-center justify-between"><span id={QUEUE_TITLE_ID} className="text-[10px] font-bold uppercase tracking-widest text-white/40">Antrean</span>{queue.length > 0 && <button type="button" onClick={() => setQueue([])} className="text-[10px] text-white/30 hover:text-white">Hapus semua</button>}</div>
                   {queue.length === 0 ? <p className="py-3 text-center text-[11px] text-white/25">Antrean masih kosong.</p> : <div className="max-h-36 space-y-1 overflow-y-auto">{queue.map((item, index) => <div key={`${item.query || item.title}-${index}`} className="flex items-center gap-2 rounded-lg px-2 py-1.5 hover:bg-white/5"><span className="w-4 text-center text-[10px] text-white/25">{index + 1}</span><img src={item.image || '/audio/black-beatles.jpg'} alt="" className="h-7 w-7 rounded object-cover" /><span className="min-w-0 flex-1 truncate text-[11px] text-white/70">{item.title}</span><button type="button" onClick={() => setQueue((items) => items.filter((_, itemIndex) => itemIndex !== index))} aria-label={`Hapus ${item.title}`} className="text-white/25 hover:text-white"><Icon name="close" size={12} /></button></div>)}</div>}
                 </motion.div>
               )}
             </AnimatePresence>
-            {error && <p role="status" className="mt-3 border-t border-red-400/10 pt-2 text-[10px] leading-relaxed text-red-300/80">{error}</p>}
+            {error && <p role="alert" aria-live="assertive" className="mt-3 border-t border-red-400/10 pt-2 text-[10px] leading-relaxed text-red-300/80">{error}</p>}
           </motion.div>
         )}
       </AnimatePresence>
 
       <motion.div layout className="flex items-center overflow-hidden rounded-full border border-white/10 bg-[#0a0a0a]/85 pr-1.5 shadow-2xl backdrop-blur-xl" style={{ boxShadow: isPlaying ? '0 0 24px rgba(0, 242, 254, 0.25)' : undefined }}>
-        <button type="button" onClick={() => void togglePlay()} aria-label={isPlaying ? 'Pause lagu' : 'Putar lagu'} className="group relative flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full"><img src={track.image || '/audio/black-beatles.jpg'} alt="Cover lagu" className={`absolute inset-0 h-full w-full object-cover opacity-70 transition group-hover:opacity-40 ${!isPlaying ? 'grayscale' : ''}`} /><span className="relative z-10 text-accent">{loading ? <span className="block h-5 w-5 animate-spin rounded-full border-2 border-accent/30 border-t-accent" /> : <Icon name={isPlaying ? 'pause' : 'play'} size={16} />}</span></button>
-        <button type="button" onClick={() => setIsExpanded((value) => !value)} aria-label="Buka detail music player" className="min-w-0 flex-1 px-3 text-left"><span className="block max-w-32 truncate text-[10px] font-black uppercase tracking-wider text-accent">{track.title}</span><span className="block max-w-32 truncate font-mono text-[9px] text-white/50">{track.artist}</span></button>
-        <button type="button" onClick={() => { setShowSearch((value) => !value); setIsExpanded(true); }} aria-label="Cari lagu" className={`rounded-full p-2 transition hover:bg-white/10 ${showSearch ? 'text-accent' : 'text-white/50'}`}><Icon name="search" size={15} /></button>
+        <button type="button" onClick={() => void togglePlay()} aria-label={isPlaying ? 'Pause lagu' : 'Putar lagu'} aria-busy={loading} className="group relative flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full"><img src={track.image || '/audio/black-beatles.jpg'} alt="Cover lagu" className={`absolute inset-0 h-full w-full object-cover opacity-70 transition group-hover:opacity-40 ${!isPlaying ? 'grayscale' : ''}`} /><span className="relative z-10 text-accent">{loading ? <><span aria-hidden="true" className="block h-5 w-5 animate-spin rounded-full border-2 border-accent/30 border-t-accent" /><span className={srOnlyClass}>Memuat audio</span></> : <Icon name={isPlaying ? 'pause' : 'play'} size={16} />}</span></button>
+        <button type="button" onClick={() => setIsExpanded((value) => !value)} aria-label="Buka detail music player" aria-expanded={isExpanded} {...(isExpanded ? { 'aria-controls': PLAYER_PANEL_ID } : {})} className="min-w-0 flex-1 px-3 text-left"><span className="block max-w-32 truncate text-[10px] font-black uppercase tracking-wider text-accent">{track.title}</span><span className="block max-w-32 truncate font-mono text-[9px] text-white/50">{track.artist}</span></button>
+        <button type="button" onClick={() => { setShowSearch((value) => !value); setIsExpanded(true); }} aria-label="Cari lagu" aria-expanded={showSearch} {...(showSearch ? { 'aria-controls': SEARCH_PANEL_ID } : {})} className={`rounded-full p-2 transition hover:bg-white/10 ${showSearch ? 'text-accent' : 'text-white/50'}`}><Icon name="search" size={15} /></button>
       </motion.div>
     </div>
   );
