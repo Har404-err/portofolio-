@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 
 const codeSnippets = {
-  curl: `curl -X GET "https://api.kyio.web.id/api/v2/ai/deepseek-v4?q=Hello&apikey=KYIO-APIKEY"`,
-  js: `const res = await fetch("https://api.kyio.web.id/api/v2/ai/deepseek-v4?q=Hello&apikey=KYIO-APIKEY");\nconst data = await res.json();\nconsole.log(data);`,
-  python: `import requests\n\nresponse = requests.get(\n    "https://api.kyio.web.id/api/v2/ai/deepseek-v4",\n    params={"q": "Hello", "apikey": "KYIO-APIKEY"}\n)\nprint(response.json())`,
+  curl: `curl -sL "https://api.kyio.web.id/api/v2/ai/deepseek-v4?q=Hello"`,
+  js: `const res = await fetch("https://api.kyio.web.id/api/v2/ai/deepseek-v4?q=Hello");\nconst data = await res.json();\nconsole.log(data);`,
+  python: `import requests\n\nresponse = requests.get(\n    "https://api.kyio.web.id/api/v2/ai/deepseek-v4",\n    params={"q": "Hello"}\n)\nprint(response.json())`,
 } as const;
 
 type CodeLanguage = keyof typeof codeSnippets;
@@ -16,7 +16,7 @@ const codeLanguageLabels: Record<CodeLanguage, string> = {
   python: 'Python',
 };
 
-const techStack = ['Next.js', 'Docker', 'Node.js', 'REST API', 'API Gateway', 'Multi-Engine'];
+const techStack = ['Next.js', 'Node.js', 'REST API', 'API Gateway', 'Multi-Engine'];
 
 const externalLinkIcon = (
   <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -134,7 +134,7 @@ const CodeShowcase: React.FC = () => {
           role="tabpanel"
           aria-labelledby={`kyio-tab-${activeTab}`}
           tabIndex={0}
-          className="min-h-52 max-h-72 overflow-auto bg-black/80 p-4 font-mono text-xs leading-relaxed text-white/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-cyan-300"
+          className="min-h-32 max-h-60 overflow-auto bg-black/80 p-4 font-mono text-xs leading-relaxed text-white/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-cyan-300"
         >
           <pre className="whitespace-pre-wrap break-words sm:whitespace-pre"><code>{codeSnippets[activeTab]}</code></pre>
         </div>
